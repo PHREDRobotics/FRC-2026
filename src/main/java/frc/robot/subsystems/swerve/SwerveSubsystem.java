@@ -51,20 +51,20 @@ public class SwerveSubsystem extends SubsystemBase {
   public SwerveSubsystem() {
     m_frontLeft = new SwerveModule(Constants.SwerveConstants.kFrontLeftDriveMotorCANId,
         Constants.SwerveConstants.kFrontLeftTurnMotorCANId,
-        Configs.FrontLeftConfig.drivingConfig,
-        Configs.FrontLeftConfig.turningConfig);
+        Configs.SwerveConfig.drivingConfig,
+        Configs.SwerveConfig.turningConfig);
     m_frontRight = new SwerveModule(Constants.SwerveConstants.kFrontRightDriveMotorCANId,
         Constants.SwerveConstants.kFrontRightTurnMotorCANId,
-        Configs.FrontRightConfig.drivingConfig,
-        Configs.FrontRightConfig.turningConfig);
+        Configs.SwerveConfig.drivingConfig,
+        Configs.SwerveConfig.turningConfig);
     m_backLeft = new SwerveModule(Constants.SwerveConstants.kBackLeftDriveMotorCANId,
         Constants.SwerveConstants.kBackLeftTurnMotorCANId,
-        Configs.BackLeftConfig.drivingConfig,
-        Configs.BackLeftConfig.turningConfig);
+        Configs.SwerveConfig.drivingConfig,
+        Configs.SwerveConfig.turningConfig);
     m_backRight = new SwerveModule(Constants.SwerveConstants.kBackRightDriveMotorCANId,
         Constants.SwerveConstants.kBackRightTurnMotorCANId,
-        Configs.BackRightConfig.drivingConfig,
-        Configs.BackRightConfig.turningConfig);
+        Configs.SwerveConfig.drivingConfig,
+        Configs.SwerveConfig.turningConfig);
 
     m_gyro = new AHRS(Constants.GyroConstants.kComType);
 
@@ -276,17 +276,6 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic() {
     m_poseEstimator.update(getRotation(), getModulePositions());
 
-    SmartDashboard.putNumber("F.L. Drive motor temp", m_frontLeft.getDriveTemp());
-
-    SmartDashboard.putNumber("Swerve/FrontLeft/Speed", m_frontLeft.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Swerve/FrontLeft/Angle", m_frontLeft.getPosition().angle.getDegrees());
-    SmartDashboard.putNumber("Swerve/FrontRight/Speed", m_frontRight.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Swerve/FrontRight/Angle", m_frontRight.getPosition().angle.getDegrees());
-    SmartDashboard.putNumber("Swerve/BackLeft/Speed", m_backLeft.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Swerve/BackLeft/Angle", m_backLeft.getPosition().angle.getDegrees());
-    SmartDashboard.putNumber("Swerve/BackRight/Speed", m_backRight.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Swerve/BackRight/Angle", m_backRight.getPosition().angle.getDegrees());
-
     SmartDashboard.putString("Speeds", getSpeeds(true).toString());
     SmartDashboard.putString("States/FL", getModuleStates()[0].toString());
     SmartDashboard.putString("States/FR", getModuleStates()[1].toString());
@@ -294,13 +283,6 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putString("States/BR", getModuleStates()[3].toString());
 
     SmartDashboard.putString("CurrentPose", getPose().toString());
-
-    SmartDashboard.putNumber("P", m_rotPID.getP());
-    SmartDashboard.putNumber("I", m_rotPID.getI());
-    SmartDashboard.putNumber("D", m_rotPID.getD());
-    m_rotPID.setP(SmartDashboard.getNumber("P", m_rotPID.getP()));
-    m_rotPID.setI(SmartDashboard.getNumber("I", m_rotPID.getI()));
-    m_rotPID.setD(SmartDashboard.getNumber("D", m_rotPID.getD()));
 
     SmartDashboard.updateValues();
   }
