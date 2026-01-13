@@ -188,9 +188,9 @@ public class SwerveSubsystem extends SubsystemBase {
   public void followTrajectory(SwerveSample sample) {
     Pose2d pose = getPose();
 
-    ChassisSpeeds speeds = new ChassisSpeeds(
-      samp
-    )
+    //ChassisSpeeds speeds = new ChassisSpeeds(
+    //  samp
+    //)
   }
 
   /**
