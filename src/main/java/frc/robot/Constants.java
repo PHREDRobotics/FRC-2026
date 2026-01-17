@@ -20,12 +20,20 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Voltage;
 
-
-
 /**
  * Constants for the robot
  */
 public class Constants {
+
+  /* -------------------- Climb Constants ------------------------ */
+  public static final class ClimbConstants {
+    public static final int kClimbMotorCANId = 99;
+
+    public static final double kClimbRaisedEncoderValue = 99;
+    public static final double kClimbLoweredEncoderValue = 99;
+  }
+
+  /* -------------------- Controller Constants ------------------- */
   public static final class ControllerConstants {
     public static final double kFlightStickXDeadband = 0.2;
     public static final double kFlightStickYDeadband = 0.15;
@@ -43,10 +51,38 @@ public class Constants {
     public static final double kMinThrottle = 2.5;
   }
 
+  /* -------------------- Gyro Constants ------------------------- */
   public static final class GyroConstants {
     public static final NavXComType kComType = NavXComType.kMXP_SPI;
   }
 
+  /* -------------------- Hopper Constants ----------------------- */
+  public static final class HopperConstants {
+
+    public static final int kHopperMotorCANId = 99;
+    public static final double kHopperSpeedSetting = 0.5;
+
+  }
+
+  /* -------------------- Intake Constants ----------------------- */
+  public static final class IntakeConstants {
+
+    public static final int kIntakeMotorCANId = 99;
+    public static final double kIntakeSpeedSetting = 99;
+
+  }
+
+  /* -------------------- Intake Arm Constants ------------------- */
+  public static final class IntakeArmConstants {
+
+    public static final int kIntakeArmMotorCANId = 99;
+
+    public static final double kArmUpEncoderValue = 99;
+    public static final double kArmDownEncoderValue = 99;
+
+  }
+
+  /* -------------------- Physical Constants --------------------- */
   public static final class PhysicalConstants {
     public static final double kRobotMassPounds = 120;
 
@@ -62,10 +98,22 @@ public class Constants {
     public static final double kNeoFreeSpeedRpm = 5676;
   }
 
+  /* -------------------- Shooter Constants ---------------------- */
   public static final class ShooterConstants {
     public static final double kAutoShooterFactor = 0.1;
+
+    public static final double kFeederSpeed = 0.5;
+
+    public static final int kFeederLeftMotorCANId = 99;
+    public static final int kFeederRightMotorCANId = 99;
+    public static final int kShooterFrontLeftMotorCANId = 99;
+    public static final int kShooterBackLeftMotorCANId = 99;
+    public static final int kShooterFrontRightMotorCANId = 99;
+    public static final int kShooterBackRightMotorCANId = 99;
+
   }
 
+  /* -------------------- Swerve Constants ----------------------- */
   public static final class SwerveConstants {
     public static final double kWheelRadius = 0.0508;
     public static final int kEncoderResolution = 4096;
@@ -115,13 +163,15 @@ public class Constants {
     public static final double kXYPosP = 0.4;
     public static final double kXYPosI = 0.001;
     public static final double kXYPosD = 0.005;
-    public static final TrapezoidProfile.Constraints kXYControllerConstraints = new TrapezoidProfile.Constraints(0.5,
+    public static final TrapezoidProfile.Constraints kXYControllerConstraints = new TrapezoidProfile.Constraints(
+        0.5,
         0.5);
 
     public static final double kRotP = 0.4;
     public static final double kRotI = 0.001;
     public static final double kRotD = 0.025;
-    public static final TrapezoidProfile.Constraints kRotControllerConstraints = new TrapezoidProfile.Constraints(0.25,
+    public static final TrapezoidProfile.Constraints kRotControllerConstraints = new TrapezoidProfile.Constraints(
+        0.25,
         0.5);
 
     public static final double kXDeadband = 0.03;
@@ -129,6 +179,7 @@ public class Constants {
     public static final double kRotDeadband = 0.05;
   }
 
+  /* -------------------- Vision Constants ----------------------- */
   public static final class VisionConstants {
     public static final double kLimelightMountAngleDegrees = 0.0;
     public static final double kLimelightLensHeightInches = 0.0;
@@ -218,8 +269,5 @@ public class Constants {
     public static final double kStrafeMult = 0.5;
     public static final Pose2d kOffset = new Pose2d(1, 0, new Rotation2d(Math.PI));
   }
-    public static final class ClimbConstants {
-        public static int kClimbControllerPort=1;
-    }
 
 }
