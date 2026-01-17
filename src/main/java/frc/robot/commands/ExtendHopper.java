@@ -4,23 +4,23 @@ import frc.robot.subsystems.Fuel.HopperSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 
-public class FeedHopper extends Command {
+public class ExtendHopper extends Command {
     
   private HopperSubsystem hopperSubsystem;
 
   /**
-   * Creates a new FeedHopperCommand.
+   * Creates a new ExtendHopperCommand.
    * 
    * @param subsystem Hopper subsystem
    */
   
-  public FeedHopper(HopperSubsystem subsystem) {
+  public ExtendHopper(HopperSubsystem subsystem) {
     hopperSubsystem = subsystem;
   }
 
   @Override
   public void initialize() {
-    hopperSubsystem.FeedHopper();
+    hopperSubsystem.extendHopper();
   }
   
 }

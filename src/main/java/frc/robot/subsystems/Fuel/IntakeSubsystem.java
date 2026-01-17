@@ -1,7 +1,6 @@
 package frc.robot.subsystems.Fuel;
 
 import frc.robot.Configs;
-import frc.robot.Configs.IntakeMotor;
 import frc.robot.Constants;
 import frc.robot.Constants.FuelConstants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,11 +13,15 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 public class IntakeSubsystem {
 
 
-  public SparkMax intakeMotorSparkMax = new SparkMax(FuelConstants.kHopperMotorCANId, MotorType.kBrushless);
+  public SparkMax intakeMotorSparkMax = new SparkMax(FuelConstants.kIntakeMotorCANId, MotorType.kBrushless);
+  public SparkMax intakeMovementSparkMax = new SparkMax(FuelConstants.kIntakeMovementCANId, MotorType.kBrushless);
 
 
 public IntakeSubsystem() {
-    intakeMotorSparkMax.configure(Configs.IntakeMotor.motorConfig, ResetMode.kResetSafeParameters,
+    intakeMotorSparkMax.configure(Configs.IntakeMovementSparkMax.motorConfig, ResetMode.kResetSafeParameters,
+        PersistMode.kPersistParameters);
+
+    intakeMovementSparkMax.configure(Configs.IntakeMovementSparkMax.motorConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
   }
 
@@ -29,6 +32,10 @@ public IntakeSubsystem() {
 
   public void startIntake() {
     intakeMotorSparkMax.set(FuelConstants.kIntakeSpeed);
+  }
+
+  public void moveIntake() {
+    intakeMovementSparkMax.set(FuelConstants.kIntakeMovementSpeed);
   }
 
 }

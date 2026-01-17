@@ -1,7 +1,7 @@
 package frc.robot.subsystems.Fuel;
 
 import frc.robot.Configs;
-import frc.robot.Configs.shooterSparkMax;
+import frc.robot.Configs.FeederMotorSparkMax;
 import frc.robot.Constants;
 import frc.robot.Constants.FuelConstants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -11,24 +11,24 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-public class ShooterSubsystem {
+public class FeederSubsystem {
 
 
-  public SparkMax shooterSparkMax = new SparkMax(FuelConstants.kShooterMotorCANId, MotorType.kBrushless);
+  public SparkMax feederMotorSparkMax = new SparkMax(FuelConstants.kFeederMotorCANId, MotorType.kBrushless);
 
 
-public ShooterSubsystem() {
-    shooterSparkMax.configure(Configs.shooterSparkMax.motorConfig, ResetMode.kResetSafeParameters,
+public FeederSubsystem() {
+    feederMotorSparkMax.configure(Configs.FeederMotorSparkMax.motorConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
   }
 
     public void stop() {
-    shooterSparkMax.set(0);
+    feederMotorSparkMax.set(0);
   }
 
 
-  public void shoot() {
-    shooterSparkMax.set(FuelConstants.kShooterSpeed);
+  public void feed() {
+    feederMotorSparkMax.set(FuelConstants.kFeederSpeed);
   }
 
 }

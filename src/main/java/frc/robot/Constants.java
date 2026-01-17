@@ -217,16 +217,17 @@ public class Constants {
 
     public static final class FuelConstants {
 
-        public static final int kHopperMotorCANId = 30;
-        public static final double kHopperIntakeSpeed = 0.5;
+        public static final int kFeederMotorCANId = 30;
+        public static final double kFeederSpeed = 0.5;
 
 
-        public static final int kShooterMotorCANId = 31;
-        public static final double kShooterSpeed = 0.5;
-
+        public static final int kHopperMotorCANId = 31;
+        public static final double kHopperSpeed = 0.5;
 
         
         public static final int kIntakeMotorCANId = 32;
         public static final double kIntakeSpeed = 0.5;
+        public static final int kIntakeMovementCANId = 33;
+        public static final double kIntakeMovementSpeed = 0.5;
     }
 }
