@@ -3,6 +3,7 @@ package frc.robot.subsystems.swerve;
 import com.studica.frc.AHRS;
 
 import choreo.trajectory.SwerveSample;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -42,13 +43,17 @@ public class SwerveSubsystem extends SubsystemBase {
   private final ProfiledPIDController m_rotPID = new ProfiledPIDController(Constants.SwerveConstants.kRotP,
       Constants.SwerveConstants.kRotI, Constants.SwerveConstants.kRotD,
       Constants.SwerveConstants.kRotControllerConstraints);
-
+    
+    // private final PIDController xController = new PIDController(10.0, 0.0, 0.0);
+    // private final PIDController yController = new PIDController(10.0, 0.0, 0.0);
+    // private final PIDController headingController = new PIDController(7.5, 0.0, 0.0);
   /**
    * Creates a new swerve subsystem
    * 
    * @param photonVision used for pose estimation
    */
   public SwerveSubsystem() {
+    
     m_frontLeft = new SwerveModule(Constants.SwerveConstants.kFrontLeftDriveMotorCANId,
         Constants.SwerveConstants.kFrontLeftTurnMotorCANId,
         Configs.SwerveConfig.drivingConfig,
@@ -187,9 +192,11 @@ public class SwerveSubsystem extends SubsystemBase {
   public void followTrajectory(SwerveSample sample) {
     Pose2d pose = getPose();
 
-    //ChassisSpeeds speeds = new ChassisSpeeds(
-    //  samp
-    //)
+        // Generate the next speeds for the robot
+        ChassisSpeeds speeds = new ChassisSpeeds(
+            sample.vx + m_xPID.calculate(pose.getX(), sample.x),
+            sample.vy + m_yPID.calculate(pose.getY(), sample.y),
+            sample.omega + m_rotPID.calculate(pose.getRotation().getRadians(), sample.heading));
   }
 
   /**

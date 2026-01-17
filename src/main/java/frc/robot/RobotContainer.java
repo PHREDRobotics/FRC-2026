@@ -5,6 +5,8 @@
 package frc.robot;
 
 import choreo.auto.AutoFactory;
+import choreo.auto.AutoRoutine;
+import choreo.auto.AutoTrajectory;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,33 +34,65 @@ public class RobotContainer {
     visionSubsystem = new VisionSubsystem();
 
     autoFactory = new AutoFactory(
-      swerveSubsystem::getPose,
-      swerveSubsystem::resetOdometry,
-      swerveSubsystem::followTrajectory, true, swerveSubsystem);
+        swerveSubsystem::getPose,
+        swerveSubsystem::resetOdometry,
+        swerveSubsystem::followTrajectory, true, swerveSubsystem);
 
     joystick = new LogitechPro(0);
     // CommandJoystick buttonBox = new CommandJoystick(1);
 
-    configureBindings(); 
+    configureBindings();
   }
 
   private void configureBindings() {
     swerveSubsystem.setDefaultCommand(new DriveCommand(swerveSubsystem,
-      joystick::getY,
-      joystick::getX, 
-      joystick::getZ,
-      joystick::getThrottle,
-      joystick::getFieldOriented));
+        joystick::getY,
+        joystick::getX,
+        joystick::getZ,
+        joystick::getThrottle,
+        joystick::getFieldOriented));
 
-   new Trigger(() -> true) // always active, sends vision estimates to swerve
+    new Trigger(() -> true) // always active, sends vision estimates to swerve
         .onTrue(new InstantCommand(() -> {
           visionSubsystem.getEstimatedRelativePose().ifPresent(pose -> {
             swerveSubsystem.addVisionMeasurement(pose, Timer.getFPGATimestamp());
           });
-        })); 
+        }));
 
-    //joystick.getAlignTag().onTrue(new AlignTagCommand(swerveSubsystem, visionSubsystem, ));
-    //joystick.getFollowTag().onTrue(new FollowTagCommand(swerveSubsystem, visionSubsystem));
+    // joystick.getAlignTag().onTrue(new AlignTagCommand(swerveSubsystem,
+    // visionSubsystem, ));
+    // joystick.getFollowTag().onTrue(new FollowTagCommand(swerveSubsystem,
+    // visionSubsystem));
+  }
+
+  public AutoRoutine driveForward() {
+    // All of this is example for how an auto could look
+    AutoRoutine routine = autoFactory.newRoutine("Drive");
+
+    // Example trajectories
+    // AutoTrajectory pickupTraj = routine.trajectory("pickupGamepiece");
+    // AutoTrajectory scoreTraj = routine.trajectory("scoreGamepiece");
+
+    // // When the routine begins, reset odometry and start the first trajectory
+    // routine.active().onTrue(
+    // Commands.sequence(
+    // )
+    // );
+
+    // // Starting at the event marker named "intake", run the intake
+    // pickupTraj.atTime("intake").onTrue(intakeSubsystem.intake());
+
+    // // When the trajectory is done, start the next trajectory
+    // pickupTraj.done().onTrue(scoreTraj.cmd());
+
+    // // While the trajectory is active, prepare the scoring subsystem
+    // scoreTraj.active().whileTrue(scoringSubsystem.getReady());
+
+    // // When the trajectory is done, score
+    // scoreTraj.done().onTrue(scoringSubsystem.score());
+
+    return routine;
+
   }
 
   public Command getAutonomousCommand() {

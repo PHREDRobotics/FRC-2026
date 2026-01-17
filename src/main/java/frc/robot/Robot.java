@@ -4,18 +4,32 @@
 
 package frc.robot;
 
+import choreo.auto.AutoFactory;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.commands.GoUpAndFall;
+// import frc.robot.subsystems.choreo.Drive;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
+  private final AutoFactory autoFactory;
+  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
   public Robot() {
     m_robotContainer = new RobotContainer();
-  }
+autoFactory = new AutoFactory(
+            swerveSubsystem::getPose, // A function that returns the current robot pose
+            swerveSubsystem::resetOdometry, // A function that resets the current robot pose to the provided Pose2d
+            swerveSubsystem::followTrajectory, // The drive subsystem trajectory follower 
+            true, // If alliance flipping should be enabled 
+            swerveSubsystem // The drive subsystem
+        );
+          }
 
   @Override
   public void robotPeriodic() {
