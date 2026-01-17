@@ -62,6 +62,10 @@ public class Constants {
     public static final double kNeoFreeSpeedRpm = 5676;
   }
 
+  public static final class ShooterConstants {
+    public static final double kAutoShooterFactor = 0.1;
+  }
+
   public static final class SwerveConstants {
     public static final double kWheelRadius = 0.0508;
     public static final int kEncoderResolution = 4096;

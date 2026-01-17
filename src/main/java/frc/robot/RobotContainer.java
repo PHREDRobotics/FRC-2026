@@ -57,8 +57,8 @@ public class RobotContainer {
           });
         })); 
 
-    joystick.getAlignTag().onTrue(new AlignTagCommand(swerveSubsystem, visionSubsystem));
-    joystick.getFollowTag().onTrue(new FollowTagCommand(swerveSubsystem, visionSubsystem));
+    //joystick.getAlignTag().onTrue(new AlignTagCommand(swerveSubsystem, visionSubsystem, ));
+    //joystick.getFollowTag().onTrue(new FollowTagCommand(swerveSubsystem, visionSubsystem));
   }
 
   public Command getAutonomousCommand() {
