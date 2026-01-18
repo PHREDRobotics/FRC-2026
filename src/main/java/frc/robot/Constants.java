@@ -32,7 +32,8 @@ public class Constants {
     public static final double kClimberExtendPower = 0.3; // this lowers the robot
     public static final double kClimberRetractPower = 1.0; // This raises the robot
 
-    public static final double kClimberRaisedEncoderValue = 99;
+    public static final double kClimberRaisedEncoderValue = 99;    
+    public static final double kClimberClimbedEncoderValue = 99;
     public static final double kClimberLoweredEncoderValue = 99;
   }
 
