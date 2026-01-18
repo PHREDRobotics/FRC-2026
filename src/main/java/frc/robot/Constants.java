@@ -25,12 +25,15 @@ import edu.wpi.first.units.measure.Voltage;
  */
 public class Constants {
 
-  /* -------------------- Climb Constants ------------------------ */
-  public static final class ClimbConstants {
-    public static final int kClimbMotorCANId = 99;
+  /* -------------------- Climber Constants ------------------------ */
+  public static final class ClimberConstants {
+    public static final int kClimberMotorCANId = 99;
 
-    public static final double kClimbRaisedEncoderValue = 99;
-    public static final double kClimbLoweredEncoderValue = 99;
+    public static final double kClimberExtendPower = 0.3; // this lowers the robot
+    public static final double kClimberRetractPower = 1.0; // This raises the robot
+
+    public static final double kClimberRaisedEncoderValue = 99;
+    public static final double kClimberLoweredEncoderValue = 99;
   }
 
   /* -------------------- Controller Constants ------------------- */
