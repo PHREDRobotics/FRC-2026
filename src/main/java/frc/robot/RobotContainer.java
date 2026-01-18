@@ -65,19 +65,23 @@ public class RobotContainer {
     // visionSubsystem));
   }
 
-  public AutoRoutine driveForward() {
+  public AutoRoutine test() {
     // All of this is example for how an auto could look
     AutoRoutine routine = autoFactory.newRoutine("Drive");
 
+
+    AutoTrajectory driveTraj = routine.trajectory("TestPath");
     // Example trajectories
     // AutoTrajectory pickupTraj = routine.trajectory("pickupGamepiece");
     // AutoTrajectory scoreTraj = routine.trajectory("scoreGamepiece");
 
     // // When the routine begins, reset odometry and start the first trajectory
-    // routine.active().onTrue(
-    // Commands.sequence(
-    // )
-    // );
+    routine.active().onTrue(
+        Commands.sequence(
+            // new InstantCommand(() -> swerveSubsystem.resetOdometry(new Pose2d(driveTraj.getInitialPose()))),
+            driveTraj.cmd()
+        )
+    );
 
     // // Starting at the event marker named "intake", run the intake
     // pickupTraj.atTime("intake").onTrue(intakeSubsystem.intake());
@@ -96,6 +100,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return test().cmd();
+    // return Commands.print("No autonomous command configured");
   }
 }

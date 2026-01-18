@@ -1,8 +1,0 @@
-package frc.robot.subsystems.choreo;
-
-import choreo.auto.AutoFactory;
-
-public class AutoRoutine {
-    // Creates a new routine with the name "exampleRoutine"
-
-}
