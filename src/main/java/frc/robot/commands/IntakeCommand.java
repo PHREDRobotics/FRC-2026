@@ -20,5 +20,17 @@ public class IntakeCommand extends Command {
   public void initialize() {
     IntakeSubsystem.startIntake();
   }
+
+  @Override
+  public void execute() {
+  }
+  @Override
+  public void end(boolean interrupted) {
+    IntakeSubsystem.stopIntake();
+  }
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
   
 }

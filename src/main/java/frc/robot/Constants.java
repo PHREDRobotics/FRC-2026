@@ -223,7 +223,8 @@ public class Constants {
 
         public static final class HopperConstants {
                 public static final int kHopperMotorCANId = 31;
-                public static final double kHopperSpeed = 0.5;
+                public static final double kHopperExtendSpeed = 0.5;
+                public static final double kHopperRetractSpeed = 0.5;
         }
 
         public static final class IntakeConstants {

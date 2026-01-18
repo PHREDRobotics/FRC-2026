@@ -3,7 +3,7 @@ package frc.robot.commands;
 import frc.robot.subsystems.Fuel.HopperSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class HopperExtendCommand extends Command {
+public class HopperCommand extends Command {
     private HopperSubsystem HopperSubsystem;
 
   /**
@@ -11,13 +11,26 @@ public class HopperExtendCommand extends Command {
    * 
    * @param subsystem Hopper subsystem
    */
-  public HopperExtendCommand(HopperSubsystem subsystem) {
+  public HopperCommand(HopperSubsystem subsystem) {
     HopperSubsystem = subsystem;
   }
 
   @Override
   public void initialize() {
-    HopperSubsystem.extendHopper();
+    HopperSubsystem.startHopper();
   }
   
+  @Override
+  public void execute() {
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    HopperSubsystem.stop();
+  }
+
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
 }

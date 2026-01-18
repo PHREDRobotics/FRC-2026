@@ -27,8 +27,8 @@ public HopperSubsystem() {
   }
 
 
-  public void extendHopper() {
-    hopperSparkMax.set(HopperConstants.kHopperSpeed);
+  public void startHopper() {
+    hopperSparkMax.set(HopperConstants.kHopperExtendSpeed);
   }
 
 }

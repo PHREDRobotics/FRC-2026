@@ -21,4 +21,17 @@ public class IntakeDown extends Command {
     IntakeSubsystem.moveIntakeDown();
   }
   
+  @Override
+  public void execute() {
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    IntakeSubsystem.stopIntakeArmMovement();
+  }
+
+  @Override
+  public boolean isFinished() {
+    return IntakeSubsystem.isIntakeDown();
+  }
 }

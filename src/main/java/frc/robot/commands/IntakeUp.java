@@ -4,7 +4,7 @@ import frc.robot.subsystems.Fuel.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class IntakeUp extends Command {
-    
+
   private IntakeSubsystem IntakeSubsystem;
 
   /**
@@ -20,5 +20,19 @@ public class IntakeUp extends Command {
   public void initialize() {
     IntakeSubsystem.moveIntakeUp();
   }
-  
+
+  @Override
+  public void execute() {
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    IntakeSubsystem.stopIntakeArmMovement();
+  }
+
+  @Override
+  public boolean isFinished() {
+    return IntakeSubsystem.isIntakeUp();
+  }
+
 }

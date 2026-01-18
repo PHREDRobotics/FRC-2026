@@ -41,7 +41,15 @@ public IntakeSubsystem() {
     intakeMovementSparkMax.set(-IntakeConstants.kIntakeMovementSpeed);
   }
 
-  public void stopIntakeMovement() {
+  public void stopIntakeArmMovement() {
     intakeMovementSparkMax.set(0);
+  }
+
+  public boolean isIntakeUp() {
+    return false;
+  }
+
+  public boolean isIntakeDown() {
+    return false;
   }
 }

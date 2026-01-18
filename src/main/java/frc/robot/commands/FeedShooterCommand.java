@@ -19,5 +19,19 @@ public class FeedShooterCommand extends Command {
   public void initialize() {
     FeederSubsystem.feed();
   }
+
+  @Override
+  public void execute() { 
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    FeederSubsystem.stop();
+  }
+
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
   
 }
