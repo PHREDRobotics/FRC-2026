@@ -34,5 +34,10 @@ public class ClimberClimbCommand extends Command {
     public boolean isFinished() {
        return m_climberSubsystem.isRobotClimbed();
     }
+
+    @Override
+    public void end(boolean interrupted) {
+      m_climberSubsystem.stopClimber();
+    }
 }
 

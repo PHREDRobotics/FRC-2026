@@ -10,51 +10,54 @@ import frc.robot.Constants;
 
 public class ClimberSubsystem extends SubsystemBase {
 
-  private SparkMax climberMotor;
-  private RelativeEncoder climberEncoder;
+  private SparkMax m_climberMotor;
+  private RelativeEncoder m_climberEncoder;
+  private double m_encoderValue;
 
   // Constructor
   public ClimberSubsystem() {
-    climberMotor = new SparkMax(Constants.ClimberConstants.kClimberMotorCANId, MotorType.kBrushless);
-    climberEncoder = climberMotor.getEncoder();
+    m_climberMotor = new SparkMax(Constants.ClimberConstants.kClimberMotorCANId, MotorType.kBrushless);
+    m_climberEncoder = m_climberMotor.getEncoder();
+    m_encoderValue = m_climberEncoder.getPosition();
   }
 
   public void resetEncoders() {
-    climberEncoder.setPosition(0);
+    m_climberEncoder.setPosition(0);
   }
 
   public double getClimberEncoder() {
-    return climberEncoder.getPosition();
+    return m_encoderValue;
   }
 
   public void startClimberExtend() {
-    climberMotor.set(Constants.ClimberConstants.kClimberExtendPower);
+    m_climberMotor.set(Constants.ClimberConstants.kClimberExtendPower);
   }
 
   public void startClimberRetract() {
-    climberMotor.set( - Constants.ClimberConstants.kClimberRetractPower);
+    m_climberMotor.set(-Constants.ClimberConstants.kClimberRetractPower);
 
   }
 
   public void stopClimber() {
-    climberMotor.set(0);
+    m_climberMotor.set(0);
   }
 
   public boolean isClimberExtended() {
-    return climberEncoder.getPosition() <= Constants.ClimberConstants.kClimberRaisedEncoderValue;
+    return m_encoderValue <= Constants.ClimberConstants.kClimberRaisedEncoderValue;
   }
 
   public boolean isRobotClimbed() {
-    return climberEncoder.getPosition() <= Constants.ClimberConstants.kClimberClimbedEncoderValue;
+    return m_encoderValue <= Constants.ClimberConstants.kClimberClimbedEncoderValue;
   }
 
   public boolean isClimberRetracted() {
-    return climberEncoder.getPosition() >= Constants.ClimberConstants.kClimberLoweredEncoderValue;
+    return m_encoderValue >= Constants.ClimberConstants.kClimberLoweredEncoderValue;
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("climb Power", climberMotor.get());
-    SmartDashboard.putNumber("climb Encoder", climberEncoder.getPosition());
+    m_encoderValue = m_climberEncoder.getPosition();
+    SmartDashboard.putNumber("climb Power", m_climberMotor.get());
+    SmartDashboard.putNumber("climb Encoder", m_encoderValue);
   }
 }
