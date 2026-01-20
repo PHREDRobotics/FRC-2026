@@ -18,7 +18,6 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.Voltage;
 
 /**
  * Constants for the robot
@@ -115,6 +114,8 @@ public class Constants {
     public static final int kShooterFrontRightMotorCANId = 46;
     public static final int kShooterBackRightMotorCANId = 47;
 
+    public static final double kAutoShooterDistanceMultiplier = 0.2;
+    public static final double kAutoShooterDistanceExponent = 1.5;
   }
 
   /* -------------------- Swerve Constants ----------------------- */

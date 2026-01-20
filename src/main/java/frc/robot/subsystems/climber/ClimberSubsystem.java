@@ -1,4 +1,4 @@
-package frc.robot.subsystems.climb;
+package frc.robot.subsystems.climber;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -14,7 +14,6 @@ public class ClimberSubsystem extends SubsystemBase {
   private RelativeEncoder m_climberEncoder;
   private double m_encoderValue;
 
-  // Constructor
   public ClimberSubsystem() {
     m_climberMotor = new SparkMax(Constants.ClimberConstants.kClimberMotorCANId, MotorType.kBrushless);
     m_climberEncoder = m_climberMotor.getEncoder();

@@ -59,6 +59,10 @@ public class VisionSubsystem extends SubsystemBase {
     return tagTransform;
   }
 
+  public double getHubDistance() {
+    return 0; //TODO write the function
+  }
+
   /**
    * Gets the estimated pose of the robot relative to the field
    * 

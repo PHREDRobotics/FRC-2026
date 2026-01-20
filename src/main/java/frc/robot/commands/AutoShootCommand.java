@@ -1,13 +1,11 @@
 package frc.robot.commands;
-/*
+
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.Constants.VisionConstants;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 
@@ -31,6 +29,12 @@ public class AutoShootCommand extends Command {
         addRequirements(shooterSubsystem, swerveSubsystem, visionSubsystem);
     }
 
+    private double getShootPower() {
+        double distance = m_visionSubsystem.getHubDistance();
+
+        return ShooterConstants.kAutoShooterDistanceMultiplier * Math.pow(distance, ShooterConstants.kAutoShooterDistanceExponent);
+    }
+
     @Override
     public void initialize() {
         new AlignTagCommand(m_swerveSubsystem, m_visionSubsystem, x, y);
@@ -39,8 +43,21 @@ public class AutoShootCommand extends Command {
     @Override
     public void execute() {
         if (shoot) {
-            new ShootCommand(m_shooterSubsystem, );
+            //new ShootCommand(m_shooterSubsystem, getShootPower()); SHOOOOT
         }
     }
 }
-*/
+
+/*
+ * Auto shoot pseudo-code
+ * 
+ * power = k * distance^n
+ * 
+ * n = 1.5?
+ * 
+ * k = max_power / max_distance
+ * 
+ * k = 1/5?
+ * 
+ * shoot(power)
+ */
