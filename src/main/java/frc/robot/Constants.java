@@ -18,12 +18,25 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.Voltage;
 
 /**
  * Constants for the robot
  */
 public class Constants {
+
+  /* -------------------- Climber Constants ------------------------ */
+  public static final class ClimberConstants {
+    public static final int kClimberMotorCANId = 6;
+
+    public static final double kClimberExtendPower = 0.3; // this lowers the robot
+    public static final double kClimberRetractPower = 1.0; // This raises the robot
+
+    public static final double kClimberRaisedEncoderValue = 99;    /* TODO */
+    public static final double kClimberClimbedEncoderValue = 99;   /* TODO */
+    public static final double kClimberLoweredEncoderValue = 99;   /* TODO */
+  }
+
+  /* -------------------- Controller Constants ------------------- */
   public static final class ControllerConstants {
     public static final double kFlightStickXDeadband = 0.2;
     public static final double kFlightStickYDeadband = 0.15;
@@ -41,10 +54,38 @@ public class Constants {
     public static final double kMinThrottle = 2.5;
   }
 
+  /* -------------------- Gyro Constants ------------------------- */
   public static final class GyroConstants {
     public static final NavXComType kComType = NavXComType.kMXP_SPI;
   }
 
+  /* -------------------- Hopper Constants ----------------------- */
+  public static final class HopperConstants {
+
+    public static final int kHopperMotorCANId = 32;
+    public static final double kHopperSpeedSetting = 0.5;
+
+  }
+
+  /* -------------------- Intake Constants ----------------------- */
+  public static final class IntakeConstants {
+
+    public static final int kIntakeMotorCANId = 31;
+    public static final double kIntakeSpeedSetting = 99;    /* TODO */
+
+  }
+
+  /* -------------------- Intake Arm Constants ------------------- */
+  public static final class IntakeArmConstants {
+
+    public static final int kIntakeArmMotorCANId = 51;
+
+    public static final double kArmUpEncoderValue = 99;     /* TODO */
+    public static final double kArmDownEncoderValue = 99;   /* TODO */
+
+  }
+
+  /* -------------------- Physical Constants --------------------- */
   public static final class PhysicalConstants {
     public static final double kRobotMassPounds = 120;
 
@@ -60,21 +101,39 @@ public class Constants {
     public static final double kNeoFreeSpeedRpm = 5676;
   }
 
+  /* -------------------- Shooter Constants ---------------------- */
+  public static final class ShooterConstants {
+    public static final double kAutoShooterFactor = 0.1;
+
+    public static final double kFeederSpeed = 0.5;
+
+    public static final int kFeederLeftMotorCANId = 33;
+    public static final int kFeederRightMotorCANId = 34;
+    public static final int kShooterFrontLeftMotorCANId = 41;
+    public static final int kShooterBackLeftMotorCANId = 42;
+    public static final int kShooterFrontRightMotorCANId = 46;
+    public static final int kShooterBackRightMotorCANId = 47;
+
+    public static final double kAutoShooterDistanceMultiplier = 0.2;
+    public static final double kAutoShooterDistanceExponent = 1.5;
+  }
+
+  /* -------------------- Swerve Constants ----------------------- */
   public static final class SwerveConstants {
     public static final double kWheelRadius = 0.0508;
     public static final int kEncoderResolution = 4096;
 
     public static final double kDtSeconds = 0.02;
 
-    public static final int kBackLeftDriveMotorCANId = 26;
-    public static final int kFrontLeftDriveMotorCANId = 21;
-    public static final int kFrontRightDriveMotorCANId = 11;
-    public static final int kBackRightDriveMotorCANId = 16;
+    public static final int kFrontLeftDriveMotorCANId = 11;
+    public static final int kFrontRightDriveMotorCANId = 16;
+    public static final int kBackLeftDriveMotorCANId = 21;
+    public static final int kBackRightDriveMotorCANId = 26;
 
-    public static final int kBackLeftTurnMotorCANId = 27;
-    public static final int kFrontLeftTurnMotorCANId = 22;
-    public static final int kFrontRightTurnMotorCANId = 12;
-    public static final int kBackRightTurnMotorCANId = 17;
+    public static final int kFrontLeftTurnMotorCANId = 12;
+    public static final int kFrontRightTurnMotorCANId = 17;
+    public static final int kBackLeftTurnMotorCANId = 22;
+    public static final int kBackRightTurnMotorCANId = 27;
 
     public static final double kDrivingMotorReduction = 8;
     public static final double kTurningMotorReduction = 21;
@@ -109,13 +168,15 @@ public class Constants {
     public static final double kXYPosP = 0.4;
     public static final double kXYPosI = 0.001;
     public static final double kXYPosD = 0.005;
-    public static final TrapezoidProfile.Constraints kXYControllerConstraints = new TrapezoidProfile.Constraints(0.5,
+    public static final TrapezoidProfile.Constraints kXYControllerConstraints = new TrapezoidProfile.Constraints(
+        0.5,
         0.5);
 
     public static final double kRotP = 0.4;
     public static final double kRotI = 0.001;
     public static final double kRotD = 0.025;
-    public static final TrapezoidProfile.Constraints kRotControllerConstraints = new TrapezoidProfile.Constraints(0.25,
+    public static final TrapezoidProfile.Constraints kRotControllerConstraints = new TrapezoidProfile.Constraints(
+        0.25,
         0.5);
 
     public static final double kXDeadband = 0.03;
@@ -123,6 +184,7 @@ public class Constants {
     public static final double kRotDeadband = 0.05;
   }
 
+  /* -------------------- Vision Constants ----------------------- */
   public static final class VisionConstants {
     public static final double kLimelightMountAngleDegrees = 0.0;
     public static final double kLimelightLensHeightInches = 0.0;
@@ -212,4 +274,5 @@ public class Constants {
     public static final double kStrafeMult = 0.5;
     public static final Pose2d kOffset = new Pose2d(1, 0, new Rotation2d(Math.PI));
   }
+
 }
