@@ -198,6 +198,8 @@ public class Constants {
         public static final double kMetersFromReef = 8 * 0.0254; // 8 inches to meters
         public static final double kMetersFromLoadingStation = 14 * 0.0254; // 14 inches to meters
 
+        public static final double kAprilTagGapMeters = 10.5 * 0.0254;   // 10.5 inches to meters
+
         public static final double kPositionTolerance = 0.2;// TWEAK
         public static final double kAngleTolerance = 3;// TWEAK
 
