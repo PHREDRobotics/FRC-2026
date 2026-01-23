@@ -47,61 +47,25 @@ public final class Configs {
     }
   }
 
-<<<<<<< HEAD
-  public static final class shooterSparkMax {
-    public static final SparkMaxConfig motorConfig = new SparkMaxConfig();
+  public static final class feederSparkMax {
+    public static final SparkMaxConfig feederMotorConfig = new SparkMaxConfig();
     static {
-      motorConfig
+      feederMotorConfig
       .idleMode(IdleMode.kBrake)
       .smartCurrentLimit(50)
       .inverted(false);
     }
   }
 
-=======
-  public static final class FeederMotorSparkMax {
-    public static final SparkMaxConfig motorConfig = new SparkMaxConfig();
-
+  public static final class shooterSparkMax {
+    public static final SparkMaxConfig shooterMotorConfig = new SparkMaxConfig();
     static {
-      motorConfig
-          .idleMode(IdleMode.kBrake)
-          .smartCurrentLimit(50)
-          .inverted(false);
+      shooterMotorConfig
+      .idleMode(IdleMode.kBrake)
+      .smartCurrentLimit(50)
+      .inverted(false);
     }
   }
 
-  public static final class IntakeSparkMax {
-    public static final SparkMaxConfig motorConfig = new SparkMaxConfig();
-
-    static {
-      motorConfig
-          .idleMode(IdleMode.kBrake)
-          .smartCurrentLimit(50)
-          .inverted(false);
-    }
-  }
-
-  public static final class IntakeMovementSparkMax {
-    public static final SparkMaxConfig motorConfig = new SparkMaxConfig();
-
-    static {
-      motorConfig
-          .idleMode(IdleMode.kBrake)
-          .smartCurrentLimit(50)
-          .inverted(false);
-    }
-  }
-
-  public static final class HopperSparkMax {
-    public static final SparkMaxConfig motorConfig = new SparkMaxConfig();
-
-    static {
-      motorConfig
-          .idleMode(IdleMode.kBrake)
-          .smartCurrentLimit(50)
-          .inverted(false);
-    }
-  }
->>>>>>> f60b8ebdbda5301e8ac950c923fb99a830dbe246
 
 }

@@ -9,38 +9,34 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
-import frc.robot.subsystems.fuel.ShooterSubsytem.ShooterSubsystem;
-
+import frc.robot.Constants;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 public class ShooterCommand extends Command {
-   private ShooterSubsystem shooterSubsystem;
-   public ShooterCommand (ShooterSubsystem subsystem) {
-    shooterSubsystem = subsystem;
-   }
+  private ShooterSubsystem m_shooterSubsystem;
 
-@Override
-public void initialize() {
-    shooterSubsystem.runShooter(1);
-}
+  public void ShooterCommand(ShooterSubsystem subsystem) {
+    m_shooterSubsystem = subsystem;
+  }
 
-@Override
-public void execute() {
+  @Override
+  public void initialize() {
+    m_shooterSubsystem.shootMotorsStart(Constants.ShooterConstants.kInitialShootingSpeed);
+  }
 
-}
+  @Override
+  public void execute() {
 
-@Override
-public void end(boolean interrupted) {
-    shooterSubsystem.stopShooter();
-}
+  }
 
-@Override
-public boolean isFinished() {
+  @Override
+  public void end(boolean interrupted) {
+    m_shooterSubsystem.stopShooter();
+  }
+
+  @Override
+  public boolean isFinished() {
     return false;
-}
-
-
-
-
-
+  }
 
 }

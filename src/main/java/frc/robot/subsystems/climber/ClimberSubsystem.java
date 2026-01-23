@@ -14,7 +14,7 @@ public class ClimberSubsystem extends SubsystemBase {
   private RelativeEncoder m_climberEncoder;
   private double m_encoderValue;
 
-  public ClimberSubsystem() {
+  public void ClimberSubsystem() {
     m_climberMotor = new SparkMax(Constants.ClimberConstants.kClimberMotorCANId, MotorType.kBrushless);
     m_climberEncoder = m_climberMotor.getEncoder();
     m_encoderValue = m_climberEncoder.getPosition();
