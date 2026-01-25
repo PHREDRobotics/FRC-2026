@@ -79,12 +79,15 @@ public class Constants {
 
     public static final int kIntakeArmMotorCANId = 51;
 
-    public static final double kIntakeArmExtendPower= 0.5;
-    public static final double kIntakeArmRetractPower= 0.5;
+    public static final double kIntakeArmExtendPower = 0.5;
+    public static final double kIntakeArmRetractPower = 0.5;
 
     public static final double kArmUpEncoderValue = 99; /* TODO */
     public static final double kArmDownEncoderValue = 99; /* TODO */
 
+    public static final double kArmP = 0; // PID Tuning Values
+    public static final double kArmD = 0;
+    public static final double kArmI = 0;
   }
 
   /* -------------------- Physical Constants --------------------- */
