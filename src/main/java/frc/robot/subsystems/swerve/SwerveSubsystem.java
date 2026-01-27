@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
 import frc.robot.Constants;
+import frc.robot.Constants.ShooterConstants;
 
 /**
  * Subsystem for controlling swerve
@@ -181,15 +182,15 @@ public class SwerveSubsystem extends SubsystemBase {
     double rotOutput = m_rotPID.calculate(getPose().getRotation().getRadians(),
         pose.getRotation().getRadians());
 
-    // drive(xOutput, yOutput, rotOutput, false);
+    drive(xOutput, yOutput, rotOutput, false);
   }
 
   public void followTrajectory(SwerveSample sample) {
     Pose2d pose = getPose();
 
-    //ChassisSpeeds speeds = new ChassisSpeeds(
-    //  samp
-    //)
+    // ChassisSpeeds speeds = new ChassisSpeeds(
+    // samp
+    // )
   }
 
   /**
@@ -279,6 +280,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
     return ChassisSpeeds.fromRobotRelativeSpeeds(
         robotRelativeSpeeds, getPose().getRotation());
+  }
+
+  public double getShootPower(double distance) {
+    return ShooterConstants.kAutoShooterDistanceMultiplier
+        * Math.pow(distance, ShooterConstants.kAutoShooterDistanceExponent);
   }
 
   public void periodic() {

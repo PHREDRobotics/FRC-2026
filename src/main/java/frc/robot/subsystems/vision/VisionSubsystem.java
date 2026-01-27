@@ -62,7 +62,7 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   public double getHubDistance() {
-    return 0; // TODO write the function
+    return 0;
   }
 
   /**

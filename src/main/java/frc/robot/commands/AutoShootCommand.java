@@ -29,12 +29,6 @@ public class AutoShootCommand extends Command {
         addRequirements(shooterSubsystem, swerveSubsystem, visionSubsystem);
     }
 
-    private double getShootPower() {
-        double distance = m_visionSubsystem.getHubDistance();
-
-        return ShooterConstants.kAutoShooterDistanceMultiplier * Math.pow(distance, ShooterConstants.kAutoShooterDistanceExponent);
-    }
-
     @Override
     public void initialize() {
         new AlignTagCommand(m_swerveSubsystem, m_visionSubsystem, x, y);
@@ -43,7 +37,7 @@ public class AutoShootCommand extends Command {
     @Override
     public void execute() {
         if (shoot) {
-            //new ShootCommand(m_shooterSubsystem, getShootPower()); SHOOOOT
+            //new ShootCommand(m_shooterSubsystem, m_swerveSubsystem.getShootPower()); SHOOOOT
         }
     }
 }
