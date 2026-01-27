@@ -54,23 +54,24 @@ public class Constants {
     public static final double kMinThrottle = 2.5;
   }
 
-  /* -------------------- Fuel Constants ----------------------- */
-  public static final class FuelConstants {
-
-    public static final int kHopperMotorCANId = 32;
-    public static final double kHopperSpeedSetting = 0.5;
-
-    public static final int kVectorMotorCANId = 33;
-    public static final double kVectorSpeedSetting = 0.5;
-
-    public static final int kIntakeMotorCANId = 31;
-    public static final double kIntakeSpeedSetting = 1; /* TODO */
-
-  }
-
   /* -------------------- Gyro Constants ------------------------- */
   public static final class GyroConstants {
     public static final NavXComType kComType = NavXComType.kMXP_SPI;
+  }
+
+  /* -------------------- Fuel Constants ----------------------- */
+  // Intake, Hopper, and Vector
+  public static final class FuelConstants {
+
+    public static final int kHopperMotorCANId = 32;
+    public static final int kIntakeMotorCANId = 31;
+    public static final int kVectorMotorCANId = 33;
+
+    public static final double kIntakeSpeedSetting = 99; /* TODO */
+
+    public static final double kHopperSpeedSetting = 0.5;
+    public static final double kVectorSpeedSetting = 0.5;
+
   }
 
   /* -------------------- Intake Arm Constants ------------------- */
@@ -78,9 +79,15 @@ public class Constants {
 
     public static final int kIntakeArmMotorCANId = 51;
 
+    public static final double kIntakeArmExtendPower = 0.5;
+    public static final double kIntakeArmRetractPower = 0.5;
+
     public static final double kArmUpEncoderValue = 99; /* TODO */
     public static final double kArmDownEncoderValue = 99; /* TODO */
 
+    public static final double kArmP = 0; // PID Tuning Values
+    public static final double kArmD = 0;
+    public static final double kArmI = 0;
   }
 
   /* -------------------- Physical Constants --------------------- */
@@ -101,7 +108,7 @@ public class Constants {
 
   /* -------------------- Shooter Constants ---------------------- */
   public static final class ShooterConstants {
-    public static final double kInitialShootingSpeed = 1.0;
+    public static final double kAutoShooterFactor = 0.1;
 
     public static final double kFeederSpeed = 0.5;
 
@@ -113,6 +120,8 @@ public class Constants {
     public static final int kShooterFrontRightMotorCANId = 42;
     public static final int kShooterBackLeftMotorCANId = 46;
     public static final int kShooterBackRightMotorCANId = 47;
+
+    public static final double kInitialShootingSpeed = 1.0;
 
     public static final double kAutoShooterDistanceMultiplier = 0.2;
     public static final double kAutoShooterDistanceExponent = 1.5;

@@ -3,6 +3,7 @@ package frc.robot.commands;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
@@ -45,6 +46,8 @@ public class AutoShootCommand extends Command {
         if (shoot) {
             //new ShootCommand(m_shooterSubsystem, getShootPower()); SHOOOOT
         }
+
+        SmartDashboard.putNumber("Shoot power", getShootPower());
     }
 }
 
