@@ -30,6 +30,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   }
 
+  
+
   public void feederMotorsStart() {
 
     feederLeftMotorSparkMax.set(ShooterConstants.kFeederSpeed);
@@ -60,5 +62,10 @@ public class ShooterSubsystem extends SubsystemBase {
       // TODO Auto-generated method stub
       super.periodic();
   }
+
+public void stopShooter() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'stopShooter'");
+}
 
 }

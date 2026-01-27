@@ -26,14 +26,14 @@ public class Constants {
 
   /* -------------------- Climber Constants ------------------------ */
   public static final class ClimberConstants {
-    public static final int kClimberMotorCANId = 99;
+    public static final int kClimberMotorCANId = 6;
 
     public static final double kClimberExtendPower = 0.3; // this lowers the robot
     public static final double kClimberRetractPower = 1.0; // This raises the robot
 
-    public static final double kClimberRaisedEncoderValue = 99;    
-    public static final double kClimberClimbedEncoderValue = 99;
-    public static final double kClimberLoweredEncoderValue = 99;
+    public static final double kClimberRaisedEncoderValue = 99; /* TODO */
+    public static final double kClimberClimbedEncoderValue = 99; /* TODO */
+    public static final double kClimberLoweredEncoderValue = 99; /* TODO */
   }
 
   /* -------------------- Controller Constants ------------------- */
@@ -59,30 +59,35 @@ public class Constants {
     public static final NavXComType kComType = NavXComType.kMXP_SPI;
   }
 
-  /* -------------------- Hopper Constants ----------------------- */
-  public static final class HopperConstants {
+  /* -------------------- Fuel Constants ----------------------- */
+  // Intake, Hopper, and Vector
+  public static final class FuelConstants {
 
-    public static final int kHopperMotorCANId = 99;
+    public static final int kHopperMotorCANId = 32;
+    public static final int kIntakeMotorCANId = 31;
+    public static final int kVectorMotorCANId = 33;
+
+    public static final double kIntakeSpeedSetting = 99; /* TODO */
+
     public static final double kHopperSpeedSetting = 0.5;
-
-  }
-
-  /* -------------------- Intake Constants ----------------------- */
-  public static final class IntakeConstants {
-
-    public static final int kIntakeMotorCANId = 99;
-    public static final double kIntakeSpeedSetting = 99;
+    public static final double kVectorSpeedSetting = 0.5;
 
   }
 
   /* -------------------- Intake Arm Constants ------------------- */
   public static final class IntakeArmConstants {
 
-    public static final int kIntakeArmMotorCANId = 99;
+    public static final int kIntakeArmMotorCANId = 51;
 
-    public static final double kArmUpEncoderValue = 99;
-    public static final double kArmDownEncoderValue = 99;
+    public static final double kIntakeArmExtendPower = 0.5;
+    public static final double kIntakeArmRetractPower = 0.5;
 
+    public static final double kArmUpEncoderValue = 99; /* TODO */
+    public static final double kArmDownEncoderValue = 99; /* TODO */
+
+    public static final double kArmP = 0; // PID Tuning Values
+    public static final double kArmD = 0;
+    public static final double kArmI = 0;
   }
 
   /* -------------------- Physical Constants --------------------- */
@@ -107,12 +112,14 @@ public class Constants {
 
     public static final double kFeederSpeed = 0.5;
 
-    public static final int kFeederLeftMotorCANId = 99;
-    public static final int kFeederRightMotorCANId = 99;
-    public static final int kShooterFrontLeftMotorCANId = 99;
-    public static final int kShooterBackLeftMotorCANId = 99;
-    public static final int kShooterFrontRightMotorCANId = 99;
-    public static final int kShooterBackRightMotorCANId = 99;
+    public static final int kFeederLeftMotorCANId = 36;
+    public static final int kFeederRightMotorCANId = 37;
+    public static final int kShooterFrontLeftMotorCANId = 41;
+    public static final int kShooterBackLeftMotorCANId = 42;
+    public static final int kShooterFrontRightMotorCANId = 46;
+    public static final int kShooterBackRightMotorCANId = 47;
+
+    public static final double kInitialShootingSpeed = 1.0;
 
     public static final double kAutoShooterDistanceMultiplier = 0.2;
     public static final double kAutoShooterDistanceExponent = 1.5;
@@ -125,15 +132,15 @@ public class Constants {
 
     public static final double kDtSeconds = 0.02;
 
-    public static final int kBackLeftDriveMotorCANId = 26;
-    public static final int kFrontLeftDriveMotorCANId = 21;
-    public static final int kFrontRightDriveMotorCANId = 11;
-    public static final int kBackRightDriveMotorCANId = 16;
+    public static final int kFrontLeftDriveMotorCANId = 11;
+    public static final int kFrontRightDriveMotorCANId = 16;
+    public static final int kBackLeftDriveMotorCANId = 21;
+    public static final int kBackRightDriveMotorCANId = 26;
 
-    public static final int kBackLeftTurnMotorCANId = 27;
-    public static final int kFrontLeftTurnMotorCANId = 22;
-    public static final int kFrontRightTurnMotorCANId = 12;
-    public static final int kBackRightTurnMotorCANId = 17;
+    public static final int kFrontLeftTurnMotorCANId = 12;
+    public static final int kFrontRightTurnMotorCANId = 17;
+    public static final int kBackLeftTurnMotorCANId = 22;
+    public static final int kBackRightTurnMotorCANId = 27;
 
     public static final double kDrivingMotorReduction = 8;
     public static final double kTurningMotorReduction = 21;

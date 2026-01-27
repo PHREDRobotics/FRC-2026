@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.revrobotics.spark.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -45,4 +46,26 @@ public final class Configs {
           .positionWrappingInputRange(0, turningFactor);
     }
   }
+
+  public static final class feederSparkMax {
+    public static final SparkMaxConfig feederMotorConfig = new SparkMaxConfig();
+    static {
+      feederMotorConfig
+      .idleMode(IdleMode.kBrake)
+      .smartCurrentLimit(50)
+      .inverted(false);
+    }
+  }
+
+  public static final class shooterSparkMax {
+    public static final SparkMaxConfig shooterMotorConfig = new SparkMaxConfig();
+    static {
+      shooterMotorConfig
+      .idleMode(IdleMode.kBrake)
+      .smartCurrentLimit(50)
+      .inverted(false);
+    }
+  }
+
+
 }
