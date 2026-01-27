@@ -5,15 +5,12 @@
 package frc.robot;
 
 import choreo.auto.AutoFactory;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.AlignTagCommand;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.FollowTagCommand;
 import frc.robot.controls.LogitechPro;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
@@ -56,9 +53,6 @@ public class RobotContainer {
             swerveSubsystem.addVisionMeasurement(pose, Timer.getFPGATimestamp());
           });
         })); 
-
-    //joystick.getAlignTag().onTrue(new AlignTagCommand(swerveSubsystem, visionSubsystem, ));
-    //joystick.getFollowTag().onTrue(new FollowTagCommand(swerveSubsystem, visionSubsystem));
   }
 
   public Command getAutonomousCommand() {

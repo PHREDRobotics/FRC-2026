@@ -9,9 +9,8 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
-import frc.robot.subsystems.fuel.ShooterSubsytem.ShooterSubsystem;
-import frc.robot.Constants;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.Constants;
 
 public class ShooterCommand extends Command {
   private ShooterSubsystem m_shooterSubsystem;

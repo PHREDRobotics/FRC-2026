@@ -24,23 +24,23 @@ import edu.wpi.first.math.util.Units;
  */
 public class Constants {
 
-    /* -------------------- Climber Constants ------------------------ */
-    public static final class ClimberConstants {
-        public static final int kClimberMotorCANId = 6;
+  /* -------------------- Climber Constants ------------------------ */
+  public static final class ClimberConstants {
+    public static final int kClimberMotorCANId = 6;
 
-        public static final double kClimberExtendPower = 0.3; // this lowers the robot
-        public static final double kClimberRetractPower = 1.0; // This raises the robot
+    public static final double kClimberExtendPower = 0.3; // this lowers the robot
+    public static final double kClimberRetractPower = 1.0; // This raises the robot
 
-        public static final double kClimberRaisedEncoderValue = 99; /* TODO */
-        public static final double kClimberClimbedEncoderValue = 99; /* TODO */
-        public static final double kClimberLoweredEncoderValue = 99; /* TODO */
-    }
+    public static final double kClimberRaisedEncoderValue = 99; /* TODO */
+    public static final double kClimberClimbedEncoderValue = 99; /* TODO */
+    public static final double kClimberLoweredEncoderValue = 99; /* TODO */
+  }
 
-    /* -------------------- Controller Constants ------------------- */
-    public static final class ControllerConstants {
-        public static final double kFlightStickXDeadband = 0.2;
-        public static final double kFlightStickYDeadband = 0.15;
-        public static final double kFlightStickZDeadband = 0.15;
+  /* -------------------- Controller Constants ------------------- */
+  public static final class ControllerConstants {
+    public static final double kFlightStickXDeadband = 0.2;
+    public static final double kFlightStickYDeadband = 0.15;
+    public static final double kFlightStickZDeadband = 0.15;
 
     public static final double kXRateLimit = 20;
     public static final double kYRateLimit = 20;
@@ -54,45 +54,40 @@ public class Constants {
     public static final double kMinThrottle = 2.5;
   }
 
-    /* -------------------- Gyro Constants ------------------------- */
-    public static final class GyroConstants {
-        public static final NavXComType kComType = NavXComType.kMXP_SPI;
-    }
+  /* -------------------- Gyro Constants ------------------------- */
+  public static final class GyroConstants {
+    public static final NavXComType kComType = NavXComType.kMXP_SPI;
+  }
 
-    /* -------------------- Hopper Constants ----------------------- */
-    public static final class HopperConstants {
+  /* -------------------- Fuel Constants ----------------------- */
+  // Intake, Hopper, and Vector
+  public static final class FuelConstants {
 
     public static final int kHopperMotorCANId = 32;
-    public static final int kHopperVectorMotorCANId = 33;
-    public static final double kHopperSpeedSetting = 0.5;
-    
+    public static final int kIntakeMotorCANId = 31;
     public static final int kVectorMotorCANId = 33;
+
+    public static final double kIntakeSpeedSetting = 99; /* TODO */
+
+    public static final double kHopperSpeedSetting = 0.5;
     public static final double kVectorSpeedSetting = 0.5;
+
   }
-=======
-        public static final int kHopperMotorCANId = 32;
-        public static final int kHopperVectorMotorCANId = 33;
-        public static final double kHopperSpeedSetting = 0.5;
-
-    }
->>>>>>> f60b8ebdbda5301e8ac950c923fb99a830dbe246
-
-    /* -------------------- Intake Constants ----------------------- */
-    public static final class IntakeConstants {
-
-        public static final int kIntakeMotorCANId = 31;
-        public static final double kIntakeSpeedSetting = 99; /* TODO */
-
-    }
 
   /* -------------------- Intake Arm Constants ------------------- */
   public static final class IntakeArmConstants {
 
     public static final int kIntakeArmMotorCANId = 51;
 
-        public static final double kArmUpEncoderValue = 99; /* TODO */
-        public static final double kArmDownEncoderValue = 99; /* TODO */
+    public static final double kIntakeArmExtendPower = 0.5;
+    public static final double kIntakeArmRetractPower = 0.5;
 
+    public static final double kArmUpEncoderValue = 99; /* TODO */
+    public static final double kArmDownEncoderValue = 99; /* TODO */
+
+    public static final double kArmP = 0; // PID Tuning Values
+    public static final double kArmD = 0;
+    public static final double kArmI = 0;
   }
 
   /* -------------------- Physical Constants --------------------- */
@@ -111,9 +106,9 @@ public class Constants {
     public static final double kNeoFreeSpeedRpm = 5676;
   }
 
-    /* -------------------- Shooter Constants ---------------------- */
-    public static final class ShooterConstants {
-        public static final double kAutoShooterFactor = 0.1;
+  /* -------------------- Shooter Constants ---------------------- */
+  public static final class ShooterConstants {
+    public static final double kAutoShooterFactor = 0.1;
 
     public static final double kFeederSpeed = 0.5;
 
@@ -123,6 +118,8 @@ public class Constants {
     public static final int kShooterBackLeftMotorCANId = 42;
     public static final int kShooterFrontRightMotorCANId = 46;
     public static final int kShooterBackRightMotorCANId = 47;
+
+    public static final double kInitialShootingSpeed = 1.0;
 
     public static final double kAutoShooterDistanceMultiplier = 0.2;
     public static final double kAutoShooterDistanceExponent = 1.5;
