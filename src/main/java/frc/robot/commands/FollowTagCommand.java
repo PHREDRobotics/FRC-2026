@@ -1,54 +1,54 @@
-package frc.robot.commands;
+// package frc.robot.commands;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.VisionConstants;
-import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.robot.subsystems.vision.VisionSubsystem;
+// import edu.wpi.first.math.geometry.Pose2d;
+// import edu.wpi.first.wpilibj2.command.Command;
+// import frc.robot.Constants.VisionConstants;
+// import frc.robot.subsystems.swerve.SwerveSubsystem;
+// import frc.robot.subsystems.vision.VisionSubsystem;
 
-public class FollowTagCommand extends Command {
+// public class FollowTagCommand extends Command {
 
-  private SwerveSubsystem m_swerveSubsystem;
-  private VisionSubsystem m_visionSubsystem;
-  private Pose2d offset;
+//   private SwerveSubsystem m_swerveSubsystem;
+//   private VisionSubsystem m_visionSubsystem;
+//   private Pose2d offset;
 
-  public FollowTagCommand(SwerveSubsystem swerveSubsystem, VisionSubsystem visionSubsystem) {
-    this.m_swerveSubsystem = swerveSubsystem;
-    this.m_visionSubsystem = visionSubsystem;
-    addRequirements(swerveSubsystem);
-    addRequirements(visionSubsystem);
+//   public FollowTagCommand(SwerveSubsystem swerveSubsystem, VisionSubsystem visionSubsystem) {
+//     this.m_swerveSubsystem = swerveSubsystem;
+//     this.m_visionSubsystem = visionSubsystem;
+//     addRequirements(swerveSubsystem);
+//     addRequirements(visionSubsystem);
 
-    this.offset = VisionConstants.kOffset;
-  }
+//     this.offset = VisionConstants.kOffset;
+//   }
 
-  public FollowTagCommand(SwerveSubsystem swerveSubsystem, VisionSubsystem visionSubsystem, Pose2d offset) {
-    this.m_swerveSubsystem = swerveSubsystem;
-    this.m_visionSubsystem = visionSubsystem;
-    addRequirements(swerveSubsystem);
-    addRequirements(visionSubsystem);
+//   public FollowTagCommand(SwerveSubsystem swerveSubsystem, VisionSubsystem visionSubsystem, Pose2d offset) {
+//     this.m_swerveSubsystem = swerveSubsystem;
+//     this.m_visionSubsystem = visionSubsystem;
+//     addRequirements(swerveSubsystem);
+//     addRequirements(visionSubsystem);
 
-    this.offset = offset;
-  }
+//     this.offset = offset;
+//   }
 
-  @Override
-  public void initialize() {
-    m_swerveSubsystem.resetPIDs(offset);
-  }
+//   @Override
+//   public void initialize() {
+//     m_swerveSubsystem.resetPIDs(offset);
+//   }
 
-  @Override
-  public void execute() {
-    // Step 1: Get tag transform
-    // Step 2: Get target position off of tag transform
-    // Step 3: Get current pose off of tag, passing target pose if null
-    // Step 4: Set speeds using PIDs with current pose and target pose
-    // Step 5: Drive the robot
-    Pose2d currentPose = offset;
-    if (m_visionSubsystem.hasValidTarget()) {
-      currentPose = m_visionSubsystem.getEstimatedRelativePose().get();
+//   @Override
+//   public void execute() {
+//     // Step 1: Get tag transform
+//     // Step 2: Get target position off of tag transform
+//     // Step 3: Get current pose off of tag, passing target pose if null
+//     // Step 4: Set speeds using PIDs with current pose and target pose
+//     // Step 5: Drive the robot
+//     Pose2d currentPose = offset;
+//     if (m_visionSubsystem.hasValidTarget()) {
+//       currentPose = m_visionSubsystem.getEstimatedRelativePose().get();
 
-      m_swerveSubsystem.driveRelativeTo(currentPose, VisionConstants.kOffset);
-    } else {
-      m_swerveSubsystem.driveRelativeTo(VisionConstants.kOffset, VisionConstants.kOffset);
-    }
-  }
-}
+//       m_swerveSubsystem.driveRelativeTo(currentPose, VisionConstants.kOffset);
+//     } else {
+//       m_swerveSubsystem.driveRelativeTo(VisionConstants.kOffset, VisionConstants.kOffset);
+//     }
+//   }
+// }

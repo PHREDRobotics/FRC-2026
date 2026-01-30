@@ -26,7 +26,7 @@ public class Constants {
 
     /* -------------------- Climber Constants ------------------------ */
     public static final class ClimberConstants {
-        public static final int kClimberMotorCANId = 6;
+        // public static final int kClimberMotorCANId = 6;
 
         public static final double kClimberExtendPower = 0.3; // this lowers the robot
         public static final double kClimberRetractPower = 1.0; // This raises the robot
@@ -62,8 +62,8 @@ public class Constants {
     /* -------------------- Hopper Constants ----------------------- */
     public static final class HopperConstants {
 
-        public static final int kHopperMotorCANId = 32;
-        public static final int kHopperVectorMotorCANId = 33;
+        // public static final int kHopperMotorCANId = 32;
+        // public static final int kHopperVectorMotorCANId = 33;
         public static final double kHopperSpeedSetting = 0.5;
 
     }
@@ -71,7 +71,7 @@ public class Constants {
     /* -------------------- Intake Constants ----------------------- */
     public static final class IntakeConstants {
 
-        public static final int kIntakeMotorCANId = 31;
+        // public static final int kIntakeMotorCANId = 31;
         public static final double kIntakeSpeedSetting = 99; /* TODO */
 
     }
@@ -79,7 +79,7 @@ public class Constants {
     /* -------------------- Intake Arm Constants ------------------- */
     public static final class IntakeArmConstants {
 
-        public static final int kIntakeArmMotorCANId = 51;
+        // public static final int kIntakeArmMotorCANId = 51;
 
         public static final double kArmUpEncoderValue = 99; /* TODO */
         public static final double kArmDownEncoderValue = 99; /* TODO */
@@ -108,12 +108,12 @@ public class Constants {
 
         public static final double kFeederSpeed = 0.5;
 
-        public static final int kFeederLeftMotorCANId = 36;
-        public static final int kFeederRightMotorCANId = 37;
-        public static final int kShooterFrontLeftMotorCANId = 41;
-        public static final int kShooterBackLeftMotorCANId = 42;
-        public static final int kShooterFrontRightMotorCANId = 46;
-        public static final int kShooterBackRightMotorCANId = 47;
+        // public static final int kFeederLeftMotorCANId = 36;
+        // public static final int kFeederRightMotorCANId = 37;
+        // public static final int kShooterFrontLeftMotorCANId = 41;
+        // public static final int kShooterBackLeftMotorCANId = 42;
+        // public static final int kShooterFrontRightMotorCANId = 46;
+        // public static final int kShooterBackRightMotorCANId = 47;
 
         public static final double kAutoShooterDistanceMultiplier = 0.2;
         public static final double kAutoShooterDistanceExponent = 1.5;
@@ -126,15 +126,15 @@ public class Constants {
 
         public static final double kDtSeconds = 0.02;
 
-        public static final int kFrontLeftDriveMotorCANId = 11;
-        public static final int kFrontRightDriveMotorCANId = 16;
-        public static final int kBackLeftDriveMotorCANId = 21;
-        public static final int kBackRightDriveMotorCANId = 26;
+        // public static final int kFrontLeftDriveMotorCANId = 11;
+        // public static final int kFrontRightDriveMotorCANId = 16;
+        // public static final int kBackLeftDriveMotorCANId = 21;
+        // public static final int kBackRightDriveMotorCANId = 26;
 
-        public static final int kFrontLeftTurnMotorCANId = 12;
-        public static final int kFrontRightTurnMotorCANId = 17;
-        public static final int kBackLeftTurnMotorCANId = 22;
-        public static final int kBackRightTurnMotorCANId = 27;
+        // public static final int kFrontLeftTurnMotorCANId = 12;
+        // public static final int kFrontRightTurnMotorCANId = 17;
+        // public static final int kBackLeftTurnMotorCANId = 22;
+        // public static final int kBackRightTurnMotorCANId = 27;
 
         public static final double kDrivingMotorReduction = 8;
         public static final double kTurningMotorReduction = 21;
@@ -206,7 +206,7 @@ public class Constants {
         public static final String kCameraName = "ArducamOV9872 1";
 
         public static final AprilTagFieldLayout kAprilTagLayout = AprilTagFieldLayout
-                .loadField(AprilTagFields.k2025ReefscapeWelded);
+                .loadField(AprilTagFields);
 
         public static final double k2pi = Math.PI * 2;
 

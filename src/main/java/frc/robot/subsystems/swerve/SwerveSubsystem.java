@@ -1,297 +1,297 @@
-package frc.robot.subsystems.swerve;
+// package frc.robot.subsystems.swerve;
 
-import com.studica.frc.AHRS;
+// import com.studica.frc.AHRS;
 
-import choreo.trajectory.SwerveSample;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructArrayPublisher;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Configs;
-import frc.robot.Constants;
+// import choreo.trajectory.SwerveSample;
+// import edu.wpi.first.math.controller.ProfiledPIDController;
+// import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+// import edu.wpi.first.math.geometry.Pose2d;
+// import edu.wpi.first.math.geometry.Rotation2d;
+// import edu.wpi.first.math.kinematics.ChassisSpeeds;
+// import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+// import edu.wpi.first.math.kinematics.SwerveModulePosition;
+// import edu.wpi.first.math.kinematics.SwerveModuleState;
+// import edu.wpi.first.networktables.NetworkTableInstance;
+// import edu.wpi.first.networktables.StructArrayPublisher;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj2.command.SubsystemBase;
+// import frc.robot.Configs;
+// import frc.robot.Constants;
 
-/**
- * Subsystem for controlling swerve
- */
-public class SwerveSubsystem extends SubsystemBase {
-  private final SwerveModule m_frontLeft;
-  private final SwerveModule m_frontRight;
-  private final SwerveModule m_backLeft;
-  private final SwerveModule m_backRight;
+// /**
+//  * Subsystem for controlling swerve
+//  */
+// public class SwerveSubsystem extends SubsystemBase {
+//   private final SwerveModule m_frontLeft;
+//   private final SwerveModule m_frontRight;
+//   private final SwerveModule m_backLeft;
+//   private final SwerveModule m_backRight;
 
-  private final AHRS m_gyro;
+//   private final AHRS m_gyro;
 
-  private final SwerveDrivePoseEstimator m_poseEstimator;
+//   private final SwerveDrivePoseEstimator m_poseEstimator;
 
-  private final StructArrayPublisher<SwerveModuleState> publisher;
+//   private final StructArrayPublisher<SwerveModuleState> publisher;
 
-  private final ProfiledPIDController m_xPID = new ProfiledPIDController(Constants.SwerveConstants.kXYPosP,
-      Constants.SwerveConstants.kXYPosI, Constants.SwerveConstants.kXYPosD,
-      Constants.SwerveConstants.kXYControllerConstraints);
-  private final ProfiledPIDController m_yPID = new ProfiledPIDController(Constants.SwerveConstants.kXYPosP,
-      Constants.SwerveConstants.kXYPosI, Constants.SwerveConstants.kXYPosD,
-      Constants.SwerveConstants.kXYControllerConstraints);
-  private final ProfiledPIDController m_rotPID = new ProfiledPIDController(Constants.SwerveConstants.kRotP,
-      Constants.SwerveConstants.kRotI, Constants.SwerveConstants.kRotD,
-      Constants.SwerveConstants.kRotControllerConstraints);
+//   private final ProfiledPIDController m_xPID = new ProfiledPIDController(Constants.SwerveConstants.kXYPosP,
+//       Constants.SwerveConstants.kXYPosI, Constants.SwerveConstants.kXYPosD,
+//       Constants.SwerveConstants.kXYControllerConstraints);
+//   private final ProfiledPIDController m_yPID = new ProfiledPIDController(Constants.SwerveConstants.kXYPosP,
+//       Constants.SwerveConstants.kXYPosI, Constants.SwerveConstants.kXYPosD,
+//       Constants.SwerveConstants.kXYControllerConstraints);
+//   private final ProfiledPIDController m_rotPID = new ProfiledPIDController(Constants.SwerveConstants.kRotP,
+//       Constants.SwerveConstants.kRotI, Constants.SwerveConstants.kRotD,
+//       Constants.SwerveConstants.kRotControllerConstraints);
 
-  /**
-   * Creates a new swerve subsystem
-   * 
-   * @param photonVision used for pose estimation
-   */
-  public SwerveSubsystem() {
-    m_frontLeft = new SwerveModule(Constants.SwerveConstants.kFrontLeftDriveMotorCANId,
-        Constants.SwerveConstants.kFrontLeftTurnMotorCANId,
-        Configs.SwerveConfig.drivingConfig,
-        Configs.SwerveConfig.turningConfig);
-    m_frontRight = new SwerveModule(Constants.SwerveConstants.kFrontRightDriveMotorCANId,
-        Constants.SwerveConstants.kFrontRightTurnMotorCANId,
-        Configs.SwerveConfig.drivingConfig,
-        Configs.SwerveConfig.turningConfig);
-    m_backLeft = new SwerveModule(Constants.SwerveConstants.kBackLeftDriveMotorCANId,
-        Constants.SwerveConstants.kBackLeftTurnMotorCANId,
-        Configs.SwerveConfig.drivingConfig,
-        Configs.SwerveConfig.turningConfig);
-    m_backRight = new SwerveModule(Constants.SwerveConstants.kBackRightDriveMotorCANId,
-        Constants.SwerveConstants.kBackRightTurnMotorCANId,
-        Configs.SwerveConfig.drivingConfig,
-        Configs.SwerveConfig.turningConfig);
+//   /**
+//    * Creates a new swerve subsystem
+//    * 
+//    * @param photonVision used for pose estimation
+//    */
+//   public SwerveSubsystem() {
+//     m_frontLeft = new SwerveModule(Constants.SwerveConstants.kFrontLeftDriveMotorCANId,
+//         Constants.SwerveConstants.kFrontLeftTurnMotorCANId,
+//         Configs.SwerveConfig.drivingConfig,
+//         Configs.SwerveConfig.turningConfig);
+//     m_frontRight = new SwerveModule(Constants.SwerveConstants.kFrontRightDriveMotorCANId,
+//         Constants.SwerveConstants.kFrontRightTurnMotorCANId,
+//         Configs.SwerveConfig.drivingConfig,
+//         Configs.SwerveConfig.turningConfig);
+//     m_backLeft = new SwerveModule(Constants.SwerveConstants.kBackLeftDriveMotorCANId,
+//         Constants.SwerveConstants.kBackLeftTurnMotorCANId,
+//         Configs.SwerveConfig.drivingConfig,
+//         Configs.SwerveConfig.turningConfig);
+//     m_backRight = new SwerveModule(Constants.SwerveConstants.kBackRightDriveMotorCANId,
+//         Constants.SwerveConstants.kBackRightTurnMotorCANId,
+//         Configs.SwerveConfig.drivingConfig,
+//         Configs.SwerveConfig.turningConfig);
 
-    m_gyro = new AHRS(Constants.GyroConstants.kComType);
+//     m_gyro = new AHRS(Constants.GyroConstants.kComType);
 
-    m_gyro.reset();
+//     m_gyro.reset();
 
-    publisher = NetworkTableInstance.getDefault()
-        .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
+//     publisher = NetworkTableInstance.getDefault()
+//         .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
 
-    m_poseEstimator = new SwerveDrivePoseEstimator(Constants.SwerveConstants.kKinematics, getRotation(),
-        getModulePositions(), new Pose2d(), Constants.SwerveConstants.kStateStdDevs,
-        Constants.SwerveConstants.kVisionStdDevs);
+//     m_poseEstimator = new SwerveDrivePoseEstimator(Constants.SwerveConstants.kKinematics, getRotation(),
+//         getModulePositions(), new Pose2d(), Constants.SwerveConstants.kStateStdDevs,
+//         Constants.SwerveConstants.kVisionStdDevs);
 
-    m_xPID.setTolerance(0, .01);
-    m_yPID.setTolerance(0, .01);
-    m_rotPID.setTolerance(0, .05);
+//     m_xPID.setTolerance(0, .01);
+//     m_yPID.setTolerance(0, .01);
+//     m_rotPID.setTolerance(0, .05);
 
-    m_rotPID.enableContinuousInput(-Math.PI, Math.PI);
-  }
+//     m_rotPID.enableContinuousInput(-Math.PI, Math.PI);
+//   }
 
-  /**
-   * Drives the swerves!
-   * 
-   * @param xSpeed
-   * @param ySpeed
-   * @param rot
-   * @param fieldOriented
-   */
-  public void drive(double xSpeed, double ySpeed, double rot,
-      boolean fieldOriented) {
-    var swerveModuleStates = Constants.SwerveConstants.kKinematics.toSwerveModuleStates(
-        ChassisSpeeds.discretize(
-            fieldOriented
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                    xSpeed
-                        * Constants.PhysicalConstants.kMaxSpeed,
-                    ySpeed
-                        * Constants.PhysicalConstants.kMaxSpeed,
-                    rot
-                        * Constants.PhysicalConstants.kMaxAngularSpeed,
-                    m_gyro.getRotation2d())
-                : new ChassisSpeeds(
-                    xSpeed
-                        * Constants.PhysicalConstants.kMaxSpeed,
-                    ySpeed
-                        * Constants.PhysicalConstants.kMaxSpeed,
-                    rot
-                        * Constants.PhysicalConstants.kMaxAngularSpeed),
-            Constants.SwerveConstants.kDtSeconds));
+//   /**
+//    * Drives the swerves!
+//    * 
+//    * @param xSpeed
+//    * @param ySpeed
+//    * @param rot
+//    * @param fieldOriented
+//    */
+//   public void drive(double xSpeed, double ySpeed, double rot,
+//       boolean fieldOriented) {
+//     var swerveModuleStates = Constants.SwerveConstants.kKinematics.toSwerveModuleStates(
+//         ChassisSpeeds.discretize(
+//             fieldOriented
+//                 ? ChassisSpeeds.fromFieldRelativeSpeeds(
+//                     xSpeed
+//                         * Constants.PhysicalConstants.kMaxSpeed,
+//                     ySpeed
+//                         * Constants.PhysicalConstants.kMaxSpeed,
+//                     rot
+//                         * Constants.PhysicalConstants.kMaxAngularSpeed,
+//                     m_gyro.getRotation2d())
+//                 : new ChassisSpeeds(
+//                     xSpeed
+//                         * Constants.PhysicalConstants.kMaxSpeed,
+//                     ySpeed
+//                         * Constants.PhysicalConstants.kMaxSpeed,
+//                     rot
+//                         * Constants.PhysicalConstants.kMaxAngularSpeed),
+//             Constants.SwerveConstants.kDtSeconds));
 
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.PhysicalConstants.kMaxSpeed);
-    m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_backLeft.setDesiredState(swerveModuleStates[2]);
-    m_backRight.setDesiredState(swerveModuleStates[3]);
+//     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.PhysicalConstants.kMaxSpeed);
+//     m_frontLeft.setDesiredState(swerveModuleStates[0]);
+//     m_frontRight.setDesiredState(swerveModuleStates[1]);
+//     m_backLeft.setDesiredState(swerveModuleStates[2]);
+//     m_backRight.setDesiredState(swerveModuleStates[3]);
 
-    publisher.set(swerveModuleStates);
-  }
+//     publisher.set(swerveModuleStates);
+//   }
 
-  /**
-   * Drives the swerves!
-   * 
-   * @param speeds
-   * @param fieldOriented
-   */
-  public void drive(ChassisSpeeds speeds, boolean fieldOriented) {
-    var swerveModuleStates = Constants.SwerveConstants.kKinematics.toSwerveModuleStates(
-        ChassisSpeeds.discretize(
-            fieldOriented
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
-                    m_gyro.getRotation2d())
-                : speeds,
-            Constants.SwerveConstants.kDtSeconds));
+//   /**
+//    * Drives the swerves!
+//    * 
+//    * @param speeds
+//    * @param fieldOriented
+//    */
+//   public void drive(ChassisSpeeds speeds, boolean fieldOriented) {
+//     var swerveModuleStates = Constants.SwerveConstants.kKinematics.toSwerveModuleStates(
+//         ChassisSpeeds.discretize(
+//             fieldOriented
+//                 ? ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
+//                     m_gyro.getRotation2d())
+//                 : speeds,
+//             Constants.SwerveConstants.kDtSeconds));
 
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.PhysicalConstants.kMaxSpeed);
-    m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_backLeft.setDesiredState(swerveModuleStates[2]);
-    m_backRight.setDesiredState(swerveModuleStates[3]);
+//     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.PhysicalConstants.kMaxSpeed);
+//     m_frontLeft.setDesiredState(swerveModuleStates[0]);
+//     m_frontRight.setDesiredState(swerveModuleStates[1]);
+//     m_backLeft.setDesiredState(swerveModuleStates[2]);
+//     m_backRight.setDesiredState(swerveModuleStates[3]);
 
-    publisher.set(swerveModuleStates);
-  }
+//     publisher.set(swerveModuleStates);
+//   }
 
-  public void resetPIDs(Pose2d setPose) {
-    m_xPID.reset(setPose.getX());
-    m_yPID.reset(setPose.getY());
-    m_rotPID.reset(setPose.getRotation().getRadians());
-  }
+//   public void resetPIDs(Pose2d setPose) {
+//     m_xPID.reset(setPose.getX());
+//     m_yPID.reset(setPose.getY());
+//     m_rotPID.reset(setPose.getRotation().getRadians());
+//   }
 
-  public void driveRelativeTo(Pose2d currentPose, Pose2d newPose) {
-    if (Math.abs(currentPose.getX() - newPose.getX()) < Constants.SwerveConstants.kXDeadband) {
-      currentPose = new Pose2d(newPose.getX(), currentPose.getY(), currentPose.getRotation());
-    }
-    if (Math.abs(currentPose.getY() - newPose.getY()) < Constants.SwerveConstants.kYDeadband) {
-      currentPose = new Pose2d(currentPose.getX(), newPose.getY(), currentPose.getRotation());
-    }
-    if (Math.abs(currentPose.getRotation().getRadians()
-        - newPose.getRotation().getRadians()) < Constants.SwerveConstants.kRotDeadband) {
-      currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), currentPose.getRotation());
-    }
-    double xOutput = -m_xPID.calculate(currentPose.getX(), newPose.getX());
-    double yOutput = -m_yPID.calculate(currentPose.getY(), newPose.getY());
-    double rotOutput = m_rotPID.calculate(currentPose.getRotation().getRadians(), newPose.getRotation().getRadians());
+//   public void driveRelativeTo(Pose2d currentPose, Pose2d newPose) {
+//     if (Math.abs(currentPose.getX() - newPose.getX()) < Constants.SwerveConstants.kXDeadband) {
+//       currentPose = new Pose2d(newPose.getX(), currentPose.getY(), currentPose.getRotation());
+//     }
+//     if (Math.abs(currentPose.getY() - newPose.getY()) < Constants.SwerveConstants.kYDeadband) {
+//       currentPose = new Pose2d(currentPose.getX(), newPose.getY(), currentPose.getRotation());
+//     }
+//     if (Math.abs(currentPose.getRotation().getRadians()
+//         - newPose.getRotation().getRadians()) < Constants.SwerveConstants.kRotDeadband) {
+//       currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), currentPose.getRotation());
+//     }
+//     double xOutput = -m_xPID.calculate(currentPose.getX(), newPose.getX());
+//     double yOutput = -m_yPID.calculate(currentPose.getY(), newPose.getY());
+//     double rotOutput = m_rotPID.calculate(currentPose.getRotation().getRadians(), newPose.getRotation().getRadians());
 
-    SmartDashboard.putString("relative/CurrentPose Input", currentPose.toString());
-    SmartDashboard.putString("relative/NewPose Target", newPose.toString());
+//     SmartDashboard.putString("relative/CurrentPose Input", currentPose.toString());
+//     SmartDashboard.putString("relative/NewPose Target", newPose.toString());
 
-    SmartDashboard.putNumber("relative/Rotation Output", rotOutput);
-    drive(xOutput, yOutput, rotOutput, false);
-  }
+//     SmartDashboard.putNumber("relative/Rotation Output", rotOutput);
+//     drive(xOutput, yOutput, rotOutput, false);
+//   }
 
-  public void driveTo(Pose2d pose) {
-    double xOutput = -m_xPID.calculate(getPose().getX(), pose.getX());
-    double yOutput = -m_yPID.calculate(getPose().getY(), pose.getY());
-    double rotOutput = m_rotPID.calculate(getPose().getRotation().getRadians(),
-        pose.getRotation().getRadians());
+//   public void driveTo(Pose2d pose) {
+//     double xOutput = -m_xPID.calculate(getPose().getX(), pose.getX());
+//     double yOutput = -m_yPID.calculate(getPose().getY(), pose.getY());
+//     double rotOutput = m_rotPID.calculate(getPose().getRotation().getRadians(),
+//         pose.getRotation().getRadians());
 
-    // drive(xOutput, yOutput, rotOutput, false);
-  }
+//     // drive(xOutput, yOutput, rotOutput, false);
+//   }
 
-  public void followTrajectory(SwerveSample sample) {
-    Pose2d pose = getPose();
+//   public void followTrajectory(SwerveSample sample) {
+//     Pose2d pose = getPose();
 
-    //ChassisSpeeds speeds = new ChassisSpeeds(
-    //  samp
-    //)
-  }
+//     //ChassisSpeeds speeds = new ChassisSpeeds(
+//     //  samp
+//     //)
+//   }
 
-  /**
-   * Gets the rotation from the gyro
-   * 
-   * @return gyro rotation
-   */
-  public Rotation2d getRotation() {
-    return m_gyro.getRotation2d();
-  }
+//   /**
+//    * Gets the rotation from the gyro
+//    * 
+//    * @return gyro rotation
+//    */
+//   public Rotation2d getRotation() {
+//     return m_gyro.getRotation2d();
+//   }
 
-  /**
-   * Gets the current pose calculated by the pose estimator in meters
-   * 
-   * @return the current pose
-   */
-  public Pose2d getPose() {
-    return m_poseEstimator.getEstimatedPosition();
-  }
+//   /**
+//    * Gets the current pose calculated by the pose estimator in meters
+//    * 
+//    * @return the current pose
+//    */
+//   public Pose2d getPose() {
+//     return m_poseEstimator.getEstimatedPosition();
+//   }
 
-  /**
-   * Resets the odometry on the swerves back to the provided pose
-   * 
-   * @param pose The pose to reset to
-   */
-  public void resetOdometry(Pose2d pose) {
-    m_poseEstimator.resetPose(pose);
-  }
+//   /**
+//    * Resets the odometry on the swerves back to the provided pose
+//    * 
+//    * @param pose The pose to reset to
+//    */
+//   public void resetOdometry(Pose2d pose) {
+//     m_poseEstimator.resetPose(pose);
+//   }
 
-  /**
-   * Resets the gyro to 0
-   */
-  public void resetGyro() {
-    m_gyro.reset();
-  }
+//   /**
+//    * Resets the gyro to 0
+//    */
+//   public void resetGyro() {
+//     m_gyro.reset();
+//   }
 
-  /**
-   * Adds a vision measurement to the pose estimator
-   * 
-   * @param measurement the vision measurement to add
-   * @param timestamp   the time that the measurement was taken
-   */
-  public void addVisionMeasurement(Pose2d measurement, double timestamp) {
-    m_poseEstimator.addVisionMeasurement(measurement, timestamp);
-  }
+//   /**
+//    * Adds a vision measurement to the pose estimator
+//    * 
+//    * @param measurement the vision measurement to add
+//    * @param timestamp   the time that the measurement was taken
+//    */
+//   public void addVisionMeasurement(Pose2d measurement, double timestamp) {
+//     m_poseEstimator.addVisionMeasurement(measurement, timestamp);
+//   }
 
-  /**
-   * Gets the current positions of the swerve modules
-   * 
-   * @return the positions of the modules
-   */
-  public SwerveModulePosition[] getModulePositions() {
-    return new SwerveModulePosition[] {
-        m_frontLeft.getPosition(),
-        m_frontRight.getPosition(),
-        m_backLeft.getPosition(),
-        m_backRight.getPosition()
-    };
-  }
+//   /**
+//    * Gets the current positions of the swerve modules
+//    * 
+//    * @return the positions of the modules
+//    */
+//   public SwerveModulePosition[] getModulePositions() {
+//     return new SwerveModulePosition[] {
+//         m_frontLeft.getPosition(),
+//         m_frontRight.getPosition(),
+//         m_backLeft.getPosition(),
+//         m_backRight.getPosition()
+//     };
+//   }
 
-  /**
-   * Gets the current states of the modules
-   * 
-   * @return the state of all the modules
-   */
-  public SwerveModuleState[] getModuleStates() {
-    return new SwerveModuleState[] {
-        m_frontLeft.getState(),
-        m_frontRight.getState(),
-        m_backLeft.getState(),
-        m_backRight.getState() };
-  }
+//   /**
+//    * Gets the current states of the modules
+//    * 
+//    * @return the state of all the modules
+//    */
+//   public SwerveModuleState[] getModuleStates() {
+//     return new SwerveModuleState[] {
+//         m_frontLeft.getState(),
+//         m_frontRight.getState(),
+//         m_backLeft.getState(),
+//         m_backRight.getState() };
+//   }
 
-  /**
-   * Gets the current chassis speeds of the robot
-   * 
-   * @param fieldRelative whether the speeds are relative to the field or to the
-   *                      robot
-   * @return the current chassis speeds
-   */
-  public ChassisSpeeds getSpeeds(boolean fieldRelative) {
-    ChassisSpeeds robotRelativeSpeeds = Constants.SwerveConstants.kKinematics.toChassisSpeeds(getModuleStates());
+//   /**
+//    * Gets the current chassis speeds of the robot
+//    * 
+//    * @param fieldRelative whether the speeds are relative to the field or to the
+//    *                      robot
+//    * @return the current chassis speeds
+//    */
+//   public ChassisSpeeds getSpeeds(boolean fieldRelative) {
+//     ChassisSpeeds robotRelativeSpeeds = Constants.SwerveConstants.kKinematics.toChassisSpeeds(getModuleStates());
 
-    if (fieldRelative) {
-      return robotRelativeSpeeds;
-    }
+//     if (fieldRelative) {
+//       return robotRelativeSpeeds;
+//     }
 
-    return ChassisSpeeds.fromRobotRelativeSpeeds(
-        robotRelativeSpeeds, getPose().getRotation());
-  }
+//     return ChassisSpeeds.fromRobotRelativeSpeeds(
+//         robotRelativeSpeeds, getPose().getRotation());
+//   }
 
-  public void periodic() {
-    m_poseEstimator.update(getRotation(), getModulePositions());
+//   public void periodic() {
+//     m_poseEstimator.update(getRotation(), getModulePositions());
 
-    SmartDashboard.putString("Speeds", getSpeeds(true).toString());
-    SmartDashboard.putString("States/FL", getModuleStates()[0].toString());
-    SmartDashboard.putString("States/FR", getModuleStates()[1].toString());
-    SmartDashboard.putString("States/BL", getModuleStates()[2].toString());
-    SmartDashboard.putString("States/BR", getModuleStates()[3].toString());
+//     SmartDashboard.putString("Speeds", getSpeeds(true).toString());
+//     SmartDashboard.putString("States/FL", getModuleStates()[0].toString());
+//     SmartDashboard.putString("States/FR", getModuleStates()[1].toString());
+//     SmartDashboard.putString("States/BL", getModuleStates()[2].toString());
+//     SmartDashboard.putString("States/BR", getModuleStates()[3].toString());
 
-    SmartDashboard.putString("CurrentPose", getPose().toString());
+//     SmartDashboard.putString("CurrentPose", getPose().toString());
 
-    SmartDashboard.updateValues();
-  }
-}
+//     SmartDashboard.updateValues();
+//   }
+// }

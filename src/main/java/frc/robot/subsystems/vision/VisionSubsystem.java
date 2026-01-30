@@ -72,6 +72,21 @@ public class VisionSubsystem extends SubsystemBase {
    */
   public Optional<Pose2d> getEstimatedGlobalPose() {
 
+    PhotonTrackedTarget target;
+
+      target = result.getBestTarget();
+      int id = target.getFiducialId();
+      var tagPoseOpt = Constants.VisionConstants.kAprilTagLayout.getTagPose(id);
+
+      Pose3d tagPose = tagPoseOpt.get();
+      Transform3d cameraToTag = target.getBestCameraToTarget();
+      Transform3d tagToCamera = cameraToTag.inverse();
+      Pose3d cameraPose = tagPose.transformBy(tagToCamera);
+      Pose3d robotPose = cameraPose.transformBy(robotToCamera.inverse());
+
+      return Optional.ofNullable(robotPose.toPose2d());
+
+    /*
     // If there are no targets, return an empty optional
     if (result.hasTargets() == false) {
       return Optional.empty();
@@ -80,9 +95,14 @@ public class VisionSubsystem extends SubsystemBase {
     // If there is one target, use that target to estimate the pose and only that
     // target
     else if (result.targets.size() == 1) {
+      PhotonTrackedTarget target;
 
-      PhotonTrackedTarget target = result.getBestTarget();
-
+      if (!result.hasTargets()) {
+        target = result.getBestTarget();
+      } else {
+        return Optional.empty();
+      }
+        
       int id = target.getFiducialId();
       var tagPoseOpt = Constants.VisionConstants.kAprilTagLayout.getTagPose(id);
 
@@ -182,6 +202,7 @@ public class VisionSubsystem extends SubsystemBase {
 
       return Optional.ofNullable(estimatedPoseFromBothTags.toPose2d());
     }
+    */
   }
 
   public Optional<Pose2d> getEstimatedRelativePose() {
