@@ -100,6 +100,9 @@ public class Constants {
         public static final double kMaxAngularAcceleration = 3;
 
         public static final double kNeoFreeSpeedRpm = 5676;
+
+        public static final double kHubX = 3; // temp
+        public static final double kHubY = 3; // temp
     }
 
     /* -------------------- Shooter Constants ---------------------- */

@@ -51,6 +51,7 @@ public class RobotContainer {
   //     joystick::getThrottle,
   //     joystick::getFieldOriented));
 
+<<<<<<< HEAD
   //  new Trigger(() -> true) // always active, sends vision estimates to swerve
   //       .onTrue(new InstantCommand(() -> {
   //         visionSubsystem.getEstimatedRelativePose().ifPresent(pose -> {
@@ -58,6 +59,8 @@ public class RobotContainer {
   //         });
   //       })); 
 
+=======
+>>>>>>> d080477608d850e87f43d48190837dc4379ebe37
     //joystick.getAlignTag().onTrue(new AlignTagCommand(swerveSubsystem, visionSubsystem, ));
     //joystick.getFollowTag().onTrue(new FollowTagCommand(swerveSubsystem, visionSubsystem));
   // }

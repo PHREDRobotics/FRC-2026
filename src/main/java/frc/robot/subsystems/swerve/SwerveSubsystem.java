@@ -277,9 +277,21 @@
 //       return robotRelativeSpeeds;
 //     }
 
-//     return ChassisSpeeds.fromRobotRelativeSpeeds(
-//         robotRelativeSpeeds, getPose().getRotation());
-//   }
+    return ChassisSpeeds.fromRobotRelativeSpeeds(
+        robotRelativeSpeeds, getPose().getRotation());
+  }
+
+  public double getShootPower(double distance) {
+    return ShooterConstants.kAutoShooterDistanceMultiplier
+        * Math.pow(distance, ShooterConstants.kAutoShooterDistanceExponent);
+  }
+
+  public double getAutoHubRotation() {
+    double dx = Constants.PhysicalConstants.kHubX - getPose().getX();
+    double dy = Constants.PhysicalConstants.kHubY - getPose().getY(); 
+
+    return Math.atan2(dy, dx);
+  }
 
 //   public void periodic() {
 //     m_poseEstimator.update(getRotation(), getModulePositions());
