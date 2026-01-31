@@ -1,15 +1,13 @@
 package frc.robot.subsystems.vision;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Optional;
 
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
-import org.photonvision.proto.Photon;
+import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -28,6 +26,8 @@ public class VisionSubsystem extends SubsystemBase {
 
   private PhotonPipelineResult result = new PhotonPipelineResult();
 
+  private PhotonPoseEstimator m_photonPoseEstimator;
+
   /**
    * Creates a vision subsystem
    */
@@ -35,6 +35,8 @@ public class VisionSubsystem extends SubsystemBase {
     camera = new PhotonCamera(VisionConstants.kCameraName);
 
     robotToCamera = VisionConstants.robotToCamera1;
+
+    m_photonPoseEstimator = new PhotonPoseEstimator(VisionConstants.kAprilTagLayout, robotToCamera);
   }
 
   public Pose2d getTargetPose(Pose2d tag) {
@@ -73,130 +75,13 @@ public class VisionSubsystem extends SubsystemBase {
    * 
    * @return The estimated robot pose
    */
-  public Optional<Pose2d> getEstimatedGlobalPose() {
-   
-      // If there are no targets, return an empty optional
-      if (result.hasTargets() == false) {
-      return Optional.empty();
-      
-      }
-      // If there is one target, use that target to estimate the pose and only that
-      // target
-      else if (result.targets.size() == 1) {
-      PhotonTrackedTarget target = result.getBestTarget();
-      
-      int id = target.getFiducialId();
-      var tagPoseOpt = Constants.VisionConstants.kAprilTagLayout.getTagPose(id);
-      
-      Pose3d tagPose = tagPoseOpt.get();
-      Transform3d cameraToTag = target.getBestCameraToTarget();
-      Transform3d tagToCamera = cameraToTag.inverse();
-      Pose3d cameraPose = tagPose.transformBy(tagToCamera);
-      Pose3d robotPose = cameraPose.transformBy(robotToCamera.inverse());
-      
-      return Optional.ofNullable(robotPose.toPose2d());
-      }
-      // If there are two or more targets, use the two best targets to estimate the;
-      // pose
-      else {
-      PhotonTrackedTarget target = result.getBestTarget();
-      // Remove the best target to get the second best target
-      
-      int bestId = target.getFiducialId();
-      
-      result.targets.removeIf(t -> t.getFiducialId() == target.getFiducialId());
-      PhotonTrackedTarget secondTarget = result.getBestTarget();
-      
-      int secondId = secondTarget.getFiducialId();
-      
-      var bestTagPoseOpt =
-      Constants.VisionConstants.kAprilTagLayout.getTagPose(bestId);
-      var secondTagPoseOpt =
-      Constants.VisionConstants.kAprilTagLayout.getTagPose(secondId);
-      
-      Pose3d tagPose = bestTagPoseOpt.get();
-      Pose3d secondTagPose = secondTagPoseOpt.get();
-      
-      Transform3d cameraToBestTag = target.getBestCameraToTarget();
-      Transform3d cameraToSecondTag = secondTarget.getBestCameraToTarget();
-      
-      Transform3d tagToBestCamera = cameraToBestTag.inverse();
-      Transform3d tagToSecondCamera = cameraToSecondTag.inverse();
-      
-      Pose3d cameraPoseFromBestTag = tagPose.transformBy(tagToBestCamera);
-      Pose3d cameraPoseFromSecondTag =
-      secondTagPose.transformBy(tagToSecondCamera);
-      
-      Pose3d robotPoseToBestTag =
-      cameraPoseFromBestTag.transformBy(robotToCamera.inverse());
-      Pose3d robotPoseToSecondTag =
-      cameraPoseFromSecondTag.transformBy(robotToCamera.inverse());
-      
-      // The distance from the robot to the best tag
-      double distanceToBestTag = Math.sqrt(
-      Math.pow(robotPoseToBestTag.getX(), 2) +
-      Math.pow(robotPoseToBestTag.getY(), 2));
-      
-      // The distance from the robot to the second tag
-      double distanceToSecondTag = Math.sqrt(
-      Math.pow(robotPoseToSecondTag.getX(), 2) +
-      Math.pow(robotPoseToSecondTag.getY(), 2));
-      
-      // Using the law of cosines to estimate the distance to the best tag
-      double estimatedDistanceToBestTag = Math.sqrt(
-      Math.pow(Constants.VisionConstants.kAprilTagGapMeters, 2) +
-      Math.pow(distanceToSecondTag, 2) -
-      2 * Constants.VisionConstants.kAprilTagGapMeters *
-      distanceToSecondTag *
-      Math.cos(robotPoseToSecondTag.getRotation().toRotation2d().getRadians()));
-      
-      // Using the law of cosines to estimate the distance to the second best tag
-      double estimatedDistanceToSecondTag = Math.sqrt(
-      Math.pow(Constants.VisionConstants.kAprilTagGapMeters, 2) +
-      Math.pow(distanceToBestTag, 2) -
-      2 * Constants.VisionConstants.kAprilTagGapMeters *
-      distanceToSecondTag *
-      Math.cos(robotPoseToBestTag.getRotation().toRotation2d().getRadians()));
-      
-      // The estimated pose from the best tag
-      Pose3d estimatedPoseFromBestTag = new Pose3d(
-      estimatedDistanceToBestTag *
-      Math.cos(robotPoseToBestTag.getRotation().toRotation2d().getRadians()),
-      estimatedDistanceToBestTag *
-      Math.sin(robotPoseToBestTag.getRotation().toRotation2d().getRadians()),
-      0,
-      robotPoseToBestTag.getRotation());
-      
-      // The estimated pose from the second best tag
-      Pose3d estimatedPoseFromSecondTag = new Pose3d(
-      estimatedDistanceToSecondTag *
-      Math.cos(robotPoseToSecondTag.getRotation().toRotation2d().getRadians()),
-      estimatedDistanceToSecondTag *
-      Math.sin(robotPoseToSecondTag.getRotation().toRotation2d().getRadians()),
-      0,
-      robotPoseToSecondTag.getRotation());
-      
-      // Find the average of the two estimated positions
-      double avgX = (estimatedPoseFromBestTag.getX() +
-      estimatedPoseFromSecondTag.getX()) / 2;
-      double avgY = (estimatedPoseFromBestTag.getY() +
-      estimatedPoseFromSecondTag.getY()) / 2;
-      double avgRotationRadians =
-      (estimatedPoseFromBestTag.getRotation().toRotation2d().getRadians()
-      + estimatedPoseFromSecondTag.getRotation().toRotation2d().getRadians()) / 2;
-      
-      // The actual average rotation
-      Rotation2d avgRotation = new Rotation2d(avgRotationRadians);
-      
-      Pose3d estimatedPoseFromBothTags = new Pose3d(
-      avgX,
-      avgY,
-      0,
-      new Rotation3d(avgRotation));
-      
-      return Optional.ofNullable(estimatedPoseFromBothTags.toPose2d());
-      }
-    
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
+    var visionEst = m_photonPoseEstimator.estimateCoprocMultiTagPose(result);
+    if (visionEst.isEmpty()) {
+      visionEst = m_photonPoseEstimator.estimateLowestAmbiguityPose(result);
+    }
+
+    return visionEst;
   }
 
   public Optional<Pose2d> getEstimatedRelativePose() {
@@ -224,7 +109,7 @@ public class VisionSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("robotToTarget/Z", robotToTarget.getZ());
         SmartDashboard.putNumber("robotToTarget/Rot", robotToTarget.getRotation().toRotation2d().getRadians());
 
-        SmartDashboard.putString("Estimated pose", getEstimatedGlobalPose().get().toString());
+        SmartDashboard.putString("Estimated pose", getEstimatedGlobalPose().get().estimatedPose.toString());
       }
     }
   }
