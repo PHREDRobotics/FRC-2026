@@ -195,93 +195,17 @@ public class Constants {
 
   /* -------------------- Vision Constants ----------------------- */
   public static final class VisionConstants {
-    public static final double kLimelightMountAngleDegrees = 0.0;
-    public static final double kLimelightLensHeightInches = 0.0;
-    public static final double kAreaToCentimeters = 150;
-    public static final double kMetersFromAprilTag = 2;
-    public static final double kMetersSideReefAprilTag = 6.47 * 0.0254; // the distance between prongs is
-                                                                        // 12.94 so
-                                                                        // divide by 2 and convert to
-                                                                        // meters.
-    public static final double kMetersFromReef = 8 * 0.0254; // 8 inches to meters
-    public static final double kMetersFromLoadingStation = 14 * 0.0254; // 14 inches to meters
-
-    public static final double kPositionTolerance = 0.2;// TWEAK
-    public static final double kAngleTolerance = 3;// TWEAK
-
     public static final String kCameraName = "ArducamOV9872 1";
 
     public static final AprilTagFieldLayout kAprilTagLayout = AprilTagFieldLayout
-        .loadField(AprilTagFields.k2025ReefscapeWelded);
-
-    public static final double k2pi = Math.PI * 2;
-
-    public static final Pose2d kAprilTag1 = new Pose2d(657.37 * 0.0254, 25.80 * 0.0254,
-        new Rotation2d(126 * k2pi / 360));
-    public static final Pose2d kAprilTag2 = new Pose2d(657.37 * 0.0254, 291.20 * 0.0254,
-        new Rotation2d(234 * k2pi / 360));
-    public static final Pose2d kAprilTag3 = new Pose2d(455.15 * 0.0254, 317.15 * 0.0254,
-        new Rotation2d(270 * k2pi / 360));
-    public static final Pose2d kAprilTag4 = new Pose2d(365.20 * 0.0254, 241.64 * 0.0254,
-        new Rotation2d(0 * k2pi / 360));
-    public static final Pose2d kAprilTag5 = new Pose2d(365.20 * 0.0254, 75.39 * 0.0254,
-        new Rotation2d(0 * k2pi / 360));
-    public static final Pose2d kAprilTag6 = new Pose2d(530.49 * 0.0254, 130.17 * 0.0254,
-        new Rotation2d(300 * k2pi / 360));
-    public static final Pose2d kAprilTag7 = new Pose2d(546.87 * 0.0254, 158.50 * 0.0254,
-        new Rotation2d(0 * k2pi / 360));
-    public static final Pose2d kAprilTag8 = new Pose2d(530.49 * 0.0254, 186.83 * 0.0254,
-        new Rotation2d(60 * k2pi / 360));
-    public static final Pose2d kAprilTag9 = new Pose2d(497.77 * 0.0254, 186.83 * 0.0254,
-        new Rotation2d(120 * k2pi / 360));
-    public static final Pose2d kAprilTag10 = new Pose2d(481.39 * 0.0254, 158.50 * 0.0254,
-        new Rotation2d(180 * k2pi / 360));
-    public static final Pose2d kAprilTag11 = new Pose2d(497.77 * 0.0254, 130.17 * 0.0254,
-        new Rotation2d(240 * k2pi / 360));
-
-    // THE ONLY ACTUALLY IMPLEMENTED APRILTAG OF CURRENT DATE (2/8/2025, 10:32AM)
-    public static final Pose2d kAprilTag12 = new Pose2d(33.51 * 0.0254, 25.80 * 0.0254,
-        new Rotation2d(54 * k2pi / 360));
-    public static final Pose2d kAprilTag13 = new Pose2d(33.51 * 0.0254, 291.20 * 0.0254,
-        new Rotation2d(306 * k2pi / 360));
-    public static final Pose2d kAprilTag14 = new Pose2d(325.68 * 0.0254, 241.64 * 0.0254,
-        new Rotation2d(180 * k2pi / 360));
-    public static final Pose2d kAprilTag15 = new Pose2d(325.68 * 0.0254, 75.39 * 0.0254,
-        new Rotation2d(180 * k2pi / 360));
-    public static final Pose2d kAprilTag16 = new Pose2d(235.73 * 0.0254, -0.15 * 0.0254,
-        new Rotation2d(90 * k2pi / 360));
-    public static final Pose2d kAprilTag17 = new Pose2d(160.39 * 0.0254, 130.17 * 0.0254,
-        new Rotation2d(240 * k2pi / 360));
-    public static final Pose2d kAprilTag18 = new Pose2d(144.00 * 0.0254, 158.50 * 0.0254,
-        new Rotation2d(180 * k2pi / 360));
-    public static final Pose2d kAprilTag19 = new Pose2d(160.39 * 0.0254, 186.83 * 0.0254,
-        new Rotation2d(120 * k2pi / 360));
-    public static final Pose2d kAprilTag20 = new Pose2d(193.10 * 0.0254, 186.83 * 0.0254,
-        new Rotation2d(60 * k2pi / 360));
-    public static final Pose2d kAprilTag21 = new Pose2d(209.49 * 0.0254, 158.50 * 0.0254,
-        new Rotation2d(0 * k2pi / 360));
-    public static final Pose2d kAprilTag22 = new Pose2d(193.10 * 0.0254, 130.17 * 0.0254,
-        new Rotation2d(300 * k2pi / 360));
-
-    public static final Pose2d[] kAprilTags = { kAprilTag1, kAprilTag2, kAprilTag3, kAprilTag4,
-        kAprilTag5, kAprilTag6, kAprilTag7, kAprilTag8, kAprilTag9, kAprilTag10, kAprilTag11,
-        kAprilTag12, kAprilTag13, kAprilTag14, kAprilTag15, kAprilTag16, kAprilTag17,
-        kAprilTag18,
-        kAprilTag19, kAprilTag20, kAprilTag21, kAprilTag22 };
-
-    public static final Transform3d kRobotToCamera1 = new Transform3d(0, 0, 0, new Rotation3d());
-
-    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
-    public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+        .loadField(AprilTagFields.k2026RebuiltWelded);
 
     // Camera facing forward. And offset to the robot center by half a meter up and
     // half a meter forward.
-    public static final Transform3d robotToCamera1 = new Transform3d(0.5, 0, 0.5, new Rotation3d());
-    public static final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout
-        .loadField(AprilTagFields.kDefaultField);
+    public static final Transform3d robotToCamera1 = new Transform3d(0.5, 0, 0.5, new Rotation3d()); // CHANGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 
-    public static final double kStrafeMult = 0.5;
     public static final Pose2d kOffset = new Pose2d(1, 0, new Rotation2d(Math.PI));
-  }
 
+    public static final double kMetersFromAprilTag = 2;
+  }
 }
