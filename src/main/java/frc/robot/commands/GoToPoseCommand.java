@@ -1,0 +1,35 @@
+package frc.robot.commands;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.VisionConstants;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.subsystems.vision.VisionSubsystem;
+
+public class GoToPoseCommand extends Command {
+
+  private SwerveSubsystem m_swerveSubsystem;
+  private VisionSubsystem m_visionSubsystem;
+  private Pose2d pose;
+
+  public GoToPoseCommand(SwerveSubsystem swerveSubsystem, VisionSubsystem visionSubsystem, Pose2d pose) {
+    this.m_swerveSubsystem = swerveSubsystem;
+    this.m_visionSubsystem = visionSubsystem;
+    addRequirements(swerveSubsystem);
+    addRequirements(visionSubsystem);
+  }
+
+  @Override
+  public void initialize() {
+    m_swerveSubsystem.resetPIDs(new Pose2d());
+  }
+
+  @Override
+  public void execute() {
+    if (m_visionSubsystem.hasValidTarget()) {
+      m_swerveSubsystem.driveTo(pose);
+    } else {
+      m_swerveSubsystem.driveRelativeTo(new Pose2d(), new Pose2d());
+    }
+  }
+}
