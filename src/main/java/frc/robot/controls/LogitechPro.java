@@ -22,7 +22,6 @@ public class LogitechPro {
     return m_joystick.getZ();
   }
 
-  @Override
   public double getThrottle() { // have to turn 1 -> -1 to 0 -> 1
     return (1 + (-1 * m_joystick.getThrottle())) / 2;
   }

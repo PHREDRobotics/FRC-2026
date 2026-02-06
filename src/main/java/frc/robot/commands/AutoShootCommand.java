@@ -11,33 +11,43 @@ import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 
 public class AutoShootCommand extends Command {
-  private ShooterSubsystem m_shooterSubsystem;
-  private SwerveSubsystem m_swerveSubsystem;
-  private VisionSubsystem m_visionSubsystem;
-  private DoubleSupplier x;
-  private DoubleSupplier y;
+    private ShooterSubsystem m_shooterSubsystem;
+    private SwerveSubsystem m_swerveSubsystem;
+    private VisionSubsystem m_visionSubsystem;
+    private DoubleSupplier x;
+    private DoubleSupplier y;
+    private boolean shoot;
 
-  public AutoShootCommand(ShooterSubsystem shooterSubsystem, SwerveSubsystem swerveSubsystem,
-      VisionSubsystem visionSubsystem, DoubleSupplier x, DoubleSupplier y) {
-    m_shooterSubsystem = shooterSubsystem;
-    m_swerveSubsystem = swerveSubsystem;
-    m_visionSubsystem = visionSubsystem;
-    this.x = x;
-    this.y = y;
+    public AutoShootCommand(ShooterSubsystem shooterSubsystem, SwerveSubsystem swerveSubsystem,
+            VisionSubsystem visionSubsystem, DoubleSupplier x, DoubleSupplier y, BooleanSupplier shoot) {
+        m_shooterSubsystem = shooterSubsystem;
+        m_swerveSubsystem = swerveSubsystem;
+        m_visionSubsystem = visionSubsystem;
+        this.x = x;
+        this.y = y;
+        this.shoot = shoot.getAsBoolean();
 
-    addRequirements(shooterSubsystem, swerveSubsystem, visionSubsystem);
-  }
+        addRequirements(shooterSubsystem, swerveSubsystem, visionSubsystem);
+    }
 
+    private double getShootPower() {
+        double distance = m_visionSubsystem.getHubDistance();
 
-  @Override
-  public void initialize() {
-    new ShooterCommand(m_shooterSubsystem, m_visionSubsystem::getShootPower);
-  }
+        return ShooterConstants.kAutoShooterDistanceMultiplier * Math.pow(distance, ShooterConstants.kAutoShooterDistanceExponent);
+    }
 
-  @Override
+    @Override
+    public void initialize() {
+        new AlignTagCommand(m_swerveSubsystem, m_visionSubsystem, x, y);
+    }
+
+    @Override
     public void execute() {
+        if (shoot) {
+            //new ShootCommand(m_shooterSubsystem, getShootPower()); SHOOOOT
+        }
 
-        SmartDashboard.putNumber("Shoot power", m_visionSubsystem.getShootPower());
+        SmartDashboard.putNumber("Shoot power", getShootPower());
     }
 }
 

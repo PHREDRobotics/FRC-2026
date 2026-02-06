@@ -108,7 +108,7 @@ public class Constants {
 
   /* -------------------- Shooter Constants ---------------------- */
   public static final class ShooterConstants {
-    public static final double kAutoShooterFactor = 0.1 * (Math.floor(Math.PI) / Math.round(Math.E));
+    public static final double kAutoShooterFactor = 0.1;
 
     public static final double kFeederSpeed = 0.5;
 
@@ -116,22 +116,15 @@ public class Constants {
     public static final int kFeederRightMotorCANId = 37;
 
     
-    public static final int kShooterLeftMotorCANId = 41;
-    public static final int kShooterRightMotorCANId = 42;
-    //public static final int kShooterBackLeftMotorCANId = 46;
-    //public static final int kShooterBackRightMotorCANId = 47;
+    public static final int kShooterFrontLeftMotorCANId = 41;
+    public static final int kShooterFrontRightMotorCANId = 42;
+    public static final int kShooterBackLeftMotorCANId = 46;
+    public static final int kShooterBackRightMotorCANId = 47;
 
-    public static final double kInitialShootingSpeed = 1000;
+    public static final double kInitialShootingSpeed = 1.0;
 
     public static final double kAutoShooterDistanceMultiplier = 0.2;
     public static final double kAutoShooterDistanceExponent = 1.5;
-
-    public static final double kP = 0.0005;
-    public static final double kI = 0.0;
-    public static final double kD = 0.0;
-    public static final double kFFV = 0.001;
-
-    public static final double kShootThreshold = 200;
   }
 
   /* -------------------- Swerve Constants ----------------------- */
@@ -181,36 +174,6 @@ public class Constants {
     public static final Matrix<N3, N1> kStateStdDevs = VecBuilder.fill(0.2, 0.2, 0.2);
     public static final Matrix<N3, N1> kVisionStdDevs = VecBuilder.fill(0.8, 0.8, 0.8);
 
-    public static final double kDriveP = 0.4;
-    public static final double kDriveI = 0.0;
-    public static final double kDriveD = 0.0;
-    public static final double kDriveFF = 0.001;
-
-    public static final double kTurnP = 1.0;
-    public static final double kTurnI = 0.0;
-    public static final double kTurnD = 0.0;
-    public static final double kTurnFF = 0.001;
-
-    public static final double kXDeadband = 0.03;
-    public static final double kYDeadband = 0.03;
-    public static final double kRotDeadband = 0.05;
-  }
-
-  /* -------------------- Vision Constants ----------------------- */
-  public static final class VisionConstants {
-    public static final String kCameraName = "ArducamOV9872 1";
-
-    public static final AprilTagFieldLayout kAprilTagLayout = AprilTagFieldLayout
-        .loadField(AprilTagFields.k2026RebuiltWelded);
-
-    // Camera facing forward. And offset to the robot center by half a meter up and
-    // half a meter forward.
-    public static final Transform3d robotToCamera1 = new Transform3d(0.5, 0, 0.5, new Rotation3d()); // CHANGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-
-    public static final Pose2d kOffset = new Pose2d(1, 0, new Rotation2d(Math.PI));
-
-    public static final double kMetersFromAprilTag = 2;
-
     public static final double kXYPosP = 0.4;
     public static final double kXYPosI = 0.001;
     public static final double kXYPosD = 0.005;
@@ -224,5 +187,101 @@ public class Constants {
     public static final TrapezoidProfile.Constraints kRotControllerConstraints = new TrapezoidProfile.Constraints(
         0.25,
         0.5);
+
+    public static final double kXDeadband = 0.03;
+    public static final double kYDeadband = 0.03;
+    public static final double kRotDeadband = 0.05;
   }
+
+  /* -------------------- Vision Constants ----------------------- */
+  public static final class VisionConstants {
+    public static final double kLimelightMountAngleDegrees = 0.0;
+    public static final double kLimelightLensHeightInches = 0.0;
+    public static final double kAreaToCentimeters = 150;
+    public static final double kMetersFromAprilTag = 2;
+    public static final double kMetersSideReefAprilTag = 6.47 * 0.0254; // the distance between prongs is
+                                                                        // 12.94 so
+                                                                        // divide by 2 and convert to
+                                                                        // meters.
+    public static final double kMetersFromReef = 8 * 0.0254; // 8 inches to meters
+    public static final double kMetersFromLoadingStation = 14 * 0.0254; // 14 inches to meters
+
+    public static final double kPositionTolerance = 0.2;// TWEAK
+    public static final double kAngleTolerance = 3;// TWEAK
+
+    public static final String kCameraName = "ArducamOV9872 1";
+
+    public static final AprilTagFieldLayout kAprilTagLayout = AprilTagFieldLayout
+        .loadField(AprilTagFields.k2025ReefscapeWelded);
+
+    public static final double k2pi = Math.PI * 2;
+
+    public static final Pose2d kAprilTag1 = new Pose2d(657.37 * 0.0254, 25.80 * 0.0254,
+        new Rotation2d(126 * k2pi / 360));
+    public static final Pose2d kAprilTag2 = new Pose2d(657.37 * 0.0254, 291.20 * 0.0254,
+        new Rotation2d(234 * k2pi / 360));
+    public static final Pose2d kAprilTag3 = new Pose2d(455.15 * 0.0254, 317.15 * 0.0254,
+        new Rotation2d(270 * k2pi / 360));
+    public static final Pose2d kAprilTag4 = new Pose2d(365.20 * 0.0254, 241.64 * 0.0254,
+        new Rotation2d(0 * k2pi / 360));
+    public static final Pose2d kAprilTag5 = new Pose2d(365.20 * 0.0254, 75.39 * 0.0254,
+        new Rotation2d(0 * k2pi / 360));
+    public static final Pose2d kAprilTag6 = new Pose2d(530.49 * 0.0254, 130.17 * 0.0254,
+        new Rotation2d(300 * k2pi / 360));
+    public static final Pose2d kAprilTag7 = new Pose2d(546.87 * 0.0254, 158.50 * 0.0254,
+        new Rotation2d(0 * k2pi / 360));
+    public static final Pose2d kAprilTag8 = new Pose2d(530.49 * 0.0254, 186.83 * 0.0254,
+        new Rotation2d(60 * k2pi / 360));
+    public static final Pose2d kAprilTag9 = new Pose2d(497.77 * 0.0254, 186.83 * 0.0254,
+        new Rotation2d(120 * k2pi / 360));
+    public static final Pose2d kAprilTag10 = new Pose2d(481.39 * 0.0254, 158.50 * 0.0254,
+        new Rotation2d(180 * k2pi / 360));
+    public static final Pose2d kAprilTag11 = new Pose2d(497.77 * 0.0254, 130.17 * 0.0254,
+        new Rotation2d(240 * k2pi / 360));
+
+    // THE ONLY ACTUALLY IMPLEMENTED APRILTAG OF CURRENT DATE (2/8/2025, 10:32AM)
+    public static final Pose2d kAprilTag12 = new Pose2d(33.51 * 0.0254, 25.80 * 0.0254,
+        new Rotation2d(54 * k2pi / 360));
+    public static final Pose2d kAprilTag13 = new Pose2d(33.51 * 0.0254, 291.20 * 0.0254,
+        new Rotation2d(306 * k2pi / 360));
+    public static final Pose2d kAprilTag14 = new Pose2d(325.68 * 0.0254, 241.64 * 0.0254,
+        new Rotation2d(180 * k2pi / 360));
+    public static final Pose2d kAprilTag15 = new Pose2d(325.68 * 0.0254, 75.39 * 0.0254,
+        new Rotation2d(180 * k2pi / 360));
+    public static final Pose2d kAprilTag16 = new Pose2d(235.73 * 0.0254, -0.15 * 0.0254,
+        new Rotation2d(90 * k2pi / 360));
+    public static final Pose2d kAprilTag17 = new Pose2d(160.39 * 0.0254, 130.17 * 0.0254,
+        new Rotation2d(240 * k2pi / 360));
+    public static final Pose2d kAprilTag18 = new Pose2d(144.00 * 0.0254, 158.50 * 0.0254,
+        new Rotation2d(180 * k2pi / 360));
+    public static final Pose2d kAprilTag19 = new Pose2d(160.39 * 0.0254, 186.83 * 0.0254,
+        new Rotation2d(120 * k2pi / 360));
+    public static final Pose2d kAprilTag20 = new Pose2d(193.10 * 0.0254, 186.83 * 0.0254,
+        new Rotation2d(60 * k2pi / 360));
+    public static final Pose2d kAprilTag21 = new Pose2d(209.49 * 0.0254, 158.50 * 0.0254,
+        new Rotation2d(0 * k2pi / 360));
+    public static final Pose2d kAprilTag22 = new Pose2d(193.10 * 0.0254, 130.17 * 0.0254,
+        new Rotation2d(300 * k2pi / 360));
+
+    public static final Pose2d[] kAprilTags = { kAprilTag1, kAprilTag2, kAprilTag3, kAprilTag4,
+        kAprilTag5, kAprilTag6, kAprilTag7, kAprilTag8, kAprilTag9, kAprilTag10, kAprilTag11,
+        kAprilTag12, kAprilTag13, kAprilTag14, kAprilTag15, kAprilTag16, kAprilTag17,
+        kAprilTag18,
+        kAprilTag19, kAprilTag20, kAprilTag21, kAprilTag22 };
+
+    public static final Transform3d kRobotToCamera1 = new Transform3d(0, 0, 0, new Rotation3d());
+
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+    public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+
+    // Camera facing forward. And offset to the robot center by half a meter up and
+    // half a meter forward.
+    public static final Transform3d robotToCamera1 = new Transform3d(0.5, 0, 0.5, new Rotation3d());
+    public static final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout
+        .loadField(AprilTagFields.kDefaultField);
+
+    public static final double kStrafeMult = 0.5;
+    public static final Pose2d kOffset = new Pose2d(1, 0, new Rotation2d(Math.PI));
+  }
+
 }

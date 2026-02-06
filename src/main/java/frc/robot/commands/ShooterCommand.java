@@ -1,39 +1,41 @@
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.google.errorprone.annotations.Var;
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
+import com.revrobotics.spark.SparkMax;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Configs;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.Constants;
 
 public class ShooterCommand extends Command {
   private ShooterSubsystem m_shooterSubsystem;
-  private DoubleSupplier speed;
 
-  public ShooterCommand(ShooterSubsystem subsystem, DoubleSupplier speed) {
+  public void ShooterCommand(ShooterSubsystem subsystem) {
     m_shooterSubsystem = subsystem;
-    this.speed = speed;
   }
 
   @Override
   public void initialize() {
-    m_shooterSubsystem.shooterMotorsSet(Constants.ShooterConstants.kInitialShootingSpeed);
+    m_shooterSubsystem.shootMotorsStart(Constants.ShooterConstants.kInitialShootingSpeed);
   }
 
   @Override
   public void execute() {
-    m_shooterSubsystem.shooterMotorsSet(speed.getAsDouble());
-    SmartDashboard.putNumber("Target Speed", Constants.ShooterConstants.kInitialShootingSpeed);
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_shooterSubsystem.stop();
+    m_shooterSubsystem.stopShooter();
   }
 
   @Override
   public boolean isFinished() {
     return false;
   }
+
 }

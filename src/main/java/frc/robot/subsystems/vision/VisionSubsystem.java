@@ -63,13 +63,6 @@ public class VisionSubsystem extends SubsystemBase {
     return getTagPose().getY();
   }
 
-  public double getShootPower() {
-    double distance = getHubDistance();
-
-    return Constants.ShooterConstants.kAutoShooterDistanceMultiplier
-        * Math.pow(distance, Constants.ShooterConstants.kAutoShooterDistanceExponent);
-  }
-
   /**
    * Gets the estimated pose of the robot relative to the field
    * 

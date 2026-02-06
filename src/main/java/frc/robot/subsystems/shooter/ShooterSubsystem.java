@@ -6,70 +6,66 @@ import frc.robot.Constants.ShooterConstants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import com.revrobotics.PersistMode;
-import com.revrobotics.ResetMode;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 public class ShooterSubsystem extends SubsystemBase {
-  //private SparkMax m_feederLeftSparkMax = new SparkMax(ShooterConstants.kFeederLeftMotorCANId, MotorType.kBrushless);
-  //private SparkMax m_feederRightSparkMax = new SparkMax(ShooterConstants.kFeederRightMotorCANId, MotorType.kBrushless);
+  // Declare Motor Sparkmaxes
 
-  private SparkMax m_shooterLeftSparkMax = new SparkMax(ShooterConstants.kShooterLeftMotorCANId, MotorType.kBrushless);
-  private SparkMax m_shooterRightSparkMax = new SparkMax(ShooterConstants.kShooterRightMotorCANId, MotorType.kBrushless);
+  public SparkMax feederLeftMotorSparkMax = new SparkMax(ShooterConstants.kFeederRightMotorCANId, MotorType.kBrushless);
+  public SparkMax feederRightMotorSparkMax = new SparkMax(ShooterConstants.kFeederRightMotorCANId,
+      MotorType.kBrushless);
 
-  private SparkClosedLoopController m_shooterLeftPID;
-  private SparkClosedLoopController m_shooterRightPID;
+  public SparkMax shooterFrontLeftMotorSparkMax = new SparkMax(ShooterConstants.kShooterFrontLeftMotorCANId,
+      MotorType.kBrushless);
+  public SparkMax shooterFrontRightMotorSparkMax = new SparkMax(ShooterConstants.kShooterFrontRightMotorCANId,
+      MotorType.kBrushless);
+  public SparkMax shooterBackLeftMotorSparkMax = new SparkMax(ShooterConstants.kShooterBackLeftMotorCANId,
+      MotorType.kBrushless);
+  public SparkMax shooterBackRightMotorSparkMax = new SparkMax(ShooterConstants.kShooterBackRightMotorCANId,
+      MotorType.kBrushless);
 
-  private double shootSpeed;
-
-  // public SparkMax frontLeftMotorSparkMax = new
-  // SparkMax(ShooterConstants.kShooterFrontLeftMotorCANId, MotorType.kBrushless);
-  // public SparkMax shooterFrontRightMotorSparkMax = new
-  // SparkMax(ShooterConstants.kShooterFrontRightMotorCANId,MotorType.kBrushless);
-
+  // Constructor
   public ShooterSubsystem() {
-    //m_feederLeftSparkMax.configure(Configs.FeederConfig.feederMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-    //m_feederRightSparkMax.configure(Configs.FeederConfig.feederMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
 
-    m_shooterLeftSparkMax.configure(Configs.ShooterConfig.shooterMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-    m_shooterRightSparkMax.configure(Configs.ShooterConfig.shooterMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-
-    m_shooterLeftPID = m_shooterLeftSparkMax.getClosedLoopController();
-    m_shooterRightPID = m_shooterRightSparkMax.getClosedLoopController();
   }
+
+  
 
   public void feederMotorsStart() {
-    //m_feederLeftSparkMax.set(ShooterConstants.kFeederSpeed);
-    //m_feederRightSparkMax.set(ShooterConstants.kFeederSpeed);
+
+    feederLeftMotorSparkMax.set(ShooterConstants.kFeederSpeed);
+    feederRightMotorSparkMax.set(ShooterConstants.kFeederSpeed);
+
   }
 
-  public void shooterMotorsSet(double shootSpeed) {
-    this.shootSpeed = shootSpeed;
+  public void shootMotorsStart(double shootingSpeed) {
+    shooterFrontLeftMotorSparkMax.set(shootingSpeed);
+    shooterFrontRightMotorSparkMax.set(shootingSpeed);
+    shooterBackLeftMotorSparkMax.set(shootingSpeed);
+    shooterBackRightMotorSparkMax.set(shootingSpeed);
 
-    m_shooterLeftPID.setSetpoint(-this.shootSpeed, ControlType.kVelocity);
-    m_shooterRightPID.setSetpoint(this.shootSpeed, ControlType.kVelocity);
   }
 
   public void stop() {
-    //m_feederLeftSparkMax.stopMotor();
-    //m_feederRightSparkMax.stopMotor();
-    m_shooterLeftSparkMax.stopMotor();
-    m_shooterRightSparkMax.stopMotor();
-  }
+    feederLeftMotorSparkMax.set(0);
+    feederRightMotorSparkMax.set(0);
+    shooterFrontLeftMotorSparkMax.set(0);
+    shooterFrontRightMotorSparkMax.set(0);
+    shooterBackLeftMotorSparkMax.set(0);
+    shooterBackRightMotorSparkMax.set(0);
 
-  public boolean isAtSpeed() {
-    return (m_shooterLeftSparkMax.getEncoder().getVelocity() > shootSpeed - Constants.ShooterConstants.kShootThreshold) && (m_shooterLeftSparkMax.getEncoder().getVelocity() < shootSpeed + Constants.ShooterConstants.kShootThreshold); 
   }
 
   @Override
   public void periodic() {
-    super.periodic();
-
-    SmartDashboard.putNumber("sparkmax encoder", m_shooterLeftSparkMax.getEncoder().getPosition());
-    SmartDashboard.putNumber("velocity", m_shooterLeftSparkMax.getEncoder().getVelocity());
-
+      // TODO Auto-generated method stub
+      super.periodic();
   }
+
+public void stopShooter() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'stopShooter'");
+}
+
 }
