@@ -139,23 +139,26 @@ public class Constants {
 
     public static final double kDtSeconds = 0.02;
 
-    public static final int kFrontLeftDriveMotorCANId = 11;
-    public static final int kFrontRightDriveMotorCANId = 16;
+    public static final int kFrontLeftDriveMotorCANId = 27; //11;
+    public static final int kFrontRightDriveMotorCANId = 17; //16;
     public static final int kBackLeftDriveMotorCANId = 21;
-    public static final int kBackRightDriveMotorCANId = 26;
+    public static final int kBackRightDriveMotorCANId = 11;//26;
 
-    public static final int kFrontLeftTurnMotorCANId = 12;
-    public static final int kFrontRightTurnMotorCANId = 17;
+    public static final int kFrontLeftTurnMotorCANId = 26; //12;
+    public static final int kFrontRightTurnMotorCANId = 16; // 17;
     public static final int kBackLeftTurnMotorCANId = 22;
-    public static final int kBackRightTurnMotorCANId = 27;
+    public static final int kBackRightTurnMotorCANId = 12;//27;
 
     public static final double kDrivingMotorReduction = 8;
     public static final double kTurningMotorReduction = 21;
 
-    public static final Translation2d kFrontLeftLocationInches = new Translation2d(12.25, 12.25);
-    public static final Translation2d kFrontRightLocationInches = new Translation2d(12.25, -12.25);
-    public static final Translation2d kBackLeftLocationInches = new Translation2d(-12.25, 12.25);
-    public static final Translation2d kBackRightLocationInches = new Translation2d(-12.25, -12.25);
+    public static final double drivingFactor = ((Constants.SwerveConstants.kWheelRadius * 2 * Math.PI) / Constants.SwerveConstants.kDrivingMotorReduction) / 60;
+    public static final double turningFactor = 2 * Math.PI;
+
+    public static final Translation2d kFrontLeftLocationInches = new Translation2d(11, 11);
+    public static final Translation2d kFrontRightLocationInches = new Translation2d(11, -11);
+    public static final Translation2d kBackLeftLocationInches = new Translation2d(-11, 11);
+    public static final Translation2d kBackRightLocationInches = new Translation2d(-11, -11);
 
     public static final Translation2d kFrontLeftLocationMeters = new Translation2d(
         Units.inchesToMeters(Constants.SwerveConstants.kFrontLeftLocationInches.getX()),
@@ -179,15 +182,15 @@ public class Constants {
     public static final Matrix<N3, N1> kStateStdDevs = VecBuilder.fill(0.2, 0.2, 0.2);
     public static final Matrix<N3, N1> kVisionStdDevs = VecBuilder.fill(0.8, 0.8, 0.8);
 
-    public static final double kDriveP = 0.4;
+    public static final double kDriveP = 0.6;
     public static final double kDriveI = 0.0;
     public static final double kDriveD = 0.0;
-    public static final double kDriveFF = 0.001;
+    public static final double kDriveFF = 0.0;
 
-    public static final double kTurnP = 1.0;
+    public static final double kTurnP = 2.0;
     public static final double kTurnI = 0.0;
     public static final double kTurnD = 0.0;
-    public static final double kTurnFF = 0.001;
+    public static final double kTurnFF = 0.0;
 
     public static final double kXDeadband = 0.03;
     public static final double kYDeadband = 0.03;

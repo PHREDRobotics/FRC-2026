@@ -31,6 +31,8 @@ public class SwerveModule {
   private final SparkClosedLoopController m_drivePIDController;
   private final SparkClosedLoopController m_turnPIDController;
 
+  private SwerveModuleState desiredState;
+
   /**
    * Constructs a SwerveModule with a drive motor, turning motor, drive encoder
    * and turning encoder.
@@ -100,6 +102,8 @@ public class SwerveModule {
    */
   
   public void setDesiredState(SwerveModuleState desiredState) {
+    this.desiredState = desiredState;
+
     var encoderRotation = new Rotation2d(m_turnEncoder.getPosition());
 
     // Optimize the reference state to avoid spinning further than 90 degrees

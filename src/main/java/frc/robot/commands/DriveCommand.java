@@ -5,6 +5,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -90,7 +91,9 @@ public class DriveCommand extends Command {
         ySpeed,
         xSpeed,
         rot,
-        fieldOriented.getAsBoolean());
+        fieldOriented.getAsBoolean()); 
+
+    //swerveDrive.drive(0.3, 0, 0, false);
 
     SmartDashboard.putNumber("Joystick/Y", ySpeed);
     SmartDashboard.putNumber("Joystick/X", xSpeed);
