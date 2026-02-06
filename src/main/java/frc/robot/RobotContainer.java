@@ -50,15 +50,8 @@ public class RobotContainer {
       joystick::getThrottle,
       joystick.button(1)));
 
-   new Trigger(() -> true) // always active, sends vision estimates to swerve
-        .onTrue(new InstantCommand(() -> {
-          m_visionSubsystem.getEstimatedRelativePose().ifPresent(pose -> {
-            m_swerveSubsystem.addVisionMeasurement(pose, Timer.getFPGATimestamp());
-          });
-        })); 
-
     Trigger shooterButton = new Trigger(joystick.button(1));
-    shooterButton.onTrue(new ShooterCommand(m_shooterSubsystem));
+    //shooterButton.onTrue(new ShooterCommand(m_shooterSubsystem));
   }
 
   public Command getAutonomousCommand() {

@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter;
 
 import frc.robot.Configs;
+import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,6 +22,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private SparkClosedLoopController m_shooterLeftPID;
   private SparkClosedLoopController m_shooterRightPID;
+
+  private double shootSpeed;
 
   // public SparkMax frontLeftMotorSparkMax = new
   // SparkMax(ShooterConstants.kShooterFrontLeftMotorCANId, MotorType.kBrushless);
@@ -43,9 +46,11 @@ public class ShooterSubsystem extends SubsystemBase {
     //m_feederRightSparkMax.set(ShooterConstants.kFeederSpeed);
   }
 
-  public void shooterMotorsSet(double shootingSpeed) {
-    m_shooterLeftPID.setSetpoint(-shootingSpeed, ControlType.kVelocity);
-    m_shooterRightPID.setSetpoint(shootingSpeed, ControlType.kVelocity);
+  public void shooterMotorsSet(double shootSpeed) {
+    this.shootSpeed = shootSpeed;
+
+    m_shooterLeftPID.setSetpoint(-this.shootSpeed, ControlType.kVelocity);
+    m_shooterRightPID.setSetpoint(this.shootSpeed, ControlType.kVelocity);
   }
 
   public void stop() {
@@ -53,6 +58,10 @@ public class ShooterSubsystem extends SubsystemBase {
     //m_feederRightSparkMax.stopMotor();
     m_shooterLeftSparkMax.stopMotor();
     m_shooterRightSparkMax.stopMotor();
+  }
+
+  public boolean isAtSpeed() {
+    return (m_shooterLeftSparkMax.getEncoder().getVelocity() > shootSpeed - Constants.ShooterConstants.kShootThreshold) && (m_shooterLeftSparkMax.getEncoder().getVelocity() < shootSpeed + Constants.ShooterConstants.kShootThreshold); 
   }
 
   @Override

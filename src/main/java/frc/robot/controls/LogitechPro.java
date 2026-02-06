@@ -7,6 +7,7 @@ public class LogitechPro extends CommandJoystick {
     super(port);
   } 
 
+  @Override
   public double getThrottle() { // have to turn 1 -> -1 to 0 -> 1
     return (1 + (-1 * super.getThrottle())) / 2;
   }

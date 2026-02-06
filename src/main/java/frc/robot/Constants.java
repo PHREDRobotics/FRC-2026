@@ -130,6 +130,8 @@ public class Constants {
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kFFV = 0.001;
+
+    public static final double kShootThreshold = 200;
   }
 
   /* -------------------- Swerve Constants ----------------------- */
