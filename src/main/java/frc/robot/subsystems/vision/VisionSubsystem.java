@@ -2,13 +2,16 @@ package frc.robot.subsystems.vision;
 
 import java.util.Optional;
 
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,6 +26,8 @@ public class VisionSubsystem extends SubsystemBase {
 
   private PhotonPipelineResult result = new PhotonPipelineResult();
 
+  private PhotonPoseEstimator m_photonPoseEstimator;
+
   /**
    * Creates a vision subsystem
    */
@@ -30,6 +35,8 @@ public class VisionSubsystem extends SubsystemBase {
     camera = new PhotonCamera(VisionConstants.kCameraName);
 
     robotToCamera = VisionConstants.robotToCamera1;
+
+    m_photonPoseEstimator = new PhotonPoseEstimator(VisionConstants.kAprilTagLayout, robotToCamera);
   }
 
   public Pose2d getTargetPose(Pose2d tag) {
@@ -60,7 +67,7 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   public double getHubDistance() {
-    return getTagPose().getY();
+    return 0;
   }
 
   /**
@@ -68,19 +75,13 @@ public class VisionSubsystem extends SubsystemBase {
    * 
    * @return The estimated robot pose
    */
-  public Optional<Pose2d> getEstimatedGlobalPose() {
-    PhotonTrackedTarget target = result.getBestTarget();
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
+    var visionEst = m_photonPoseEstimator.estimateCoprocMultiTagPose(result);
+    if (visionEst.isEmpty()) {
+      visionEst = m_photonPoseEstimator.estimateLowestAmbiguityPose(result);
+    }
 
-    int id = target.getFiducialId();
-    var tagPoseOpt = Constants.VisionConstants.kAprilTagLayout.getTagPose(id);
-
-    Pose3d tagPose = tagPoseOpt.get();
-    Transform3d cameraToTag = target.getBestCameraToTarget();
-    Transform3d tagToCamera = cameraToTag.inverse();
-    Pose3d cameraPose = tagPose.transformBy(tagToCamera);
-    Pose3d robotPose = cameraPose.transformBy(robotToCamera.inverse());
-
-    return Optional.ofNullable(robotPose.toPose2d());
+    return visionEst;
   }
 
   public Optional<Pose2d> getEstimatedRelativePose() {
@@ -108,7 +109,7 @@ public class VisionSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("robotToTarget/Z", robotToTarget.getZ());
         SmartDashboard.putNumber("robotToTarget/Rot", robotToTarget.getRotation().toRotation2d().getRadians());
 
-        SmartDashboard.putString("Estimated pose", getEstimatedGlobalPose().get().toString());
+        SmartDashboard.putString("Estimated pose", getEstimatedGlobalPose().get().estimatedPose.toString());
       }
     }
   }

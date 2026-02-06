@@ -52,6 +52,8 @@ public class SwerveModule {
     m_drivePIDController = m_driveMotor.getClosedLoopController();
     m_turnPIDController = m_turnMotor.getClosedLoopController();
 
+    
+
     m_driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
     m_turnMotor.configure(turnConfig, ResetMode.kResetSafeParameters,
@@ -110,7 +112,7 @@ public class SwerveModule {
     // driving.
     desiredState.cosineScale(encoderRotation);
 
-    m_drivePIDController.setReference(desiredState.speedMetersPerSecond, ControlType.kVelocity);
-    m_turnPIDController.setReference(desiredState.angle.getRadians(), ControlType.kPosition);
+    m_drivePIDController.setSetpoint(desiredState.speedMetersPerSecond, ControlType.kVelocity);
+    m_turnPIDController.setSetpoint(desiredState.angle.getRadians(), ControlType.kPosition);
   }
 }

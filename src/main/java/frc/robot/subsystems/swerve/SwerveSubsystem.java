@@ -1,26 +1,18 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.swerve;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
+import com.studica.frc.AHRS;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import edu.wpi.first.math.VecBuilder;
+import choreo.trajectory.SwerveSample;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
@@ -35,134 +27,90 @@ public class SwerveSubsystem extends SubsystemBase {
   private final SwerveModule m_backLeft;
   private final SwerveModule m_backRight;
 
-  private final GyroIO m_gyro;
+  private final AHRS m_gyro;
 
-  private final SwerveDriveOdometry m_odometry;
   private final SwerveDrivePoseEstimator m_poseEstimator;
-
-  RobotConfig config;
-
-  private final Field2d m_poseEstimatorField;
-
-  public final SwerveSimulation m_swerveSimulation;
 
   private final StructArrayPublisher<SwerveModuleState> publisher;
 
-  // Instance of the swerve
-  private static SwerveSubsystem instance;
+  private final ProfiledPIDController m_xPID = new ProfiledPIDController(Constants.VisionConstants.kXYPosP,
+      Constants.VisionConstants.kXYPosI, Constants.VisionConstants.kXYPosD,
+      Constants.VisionConstants.kXYControllerConstraints);
+  private final ProfiledPIDController m_yPID = new ProfiledPIDController(Constants.VisionConstants.kXYPosP,
+      Constants.VisionConstants.kXYPosI, Constants.VisionConstants.kXYPosD,
+      Constants.VisionConstants.kXYControllerConstraints);
+  private final ProfiledPIDController m_rotPID = new ProfiledPIDController(Constants.VisionConstants.kRotP,
+      Constants.VisionConstants.kRotI, Constants.VisionConstants.kRotD,
+      Constants.VisionConstants.kRotControllerConstraints);
 
   /**
    * Creates a new swerve subsystem
+   * 
+   * @param photonVision used for pose estimation
    */
   public SwerveSubsystem() {
-    if (RobotBase.isReal()) {
-      m_frontLeft = new SparkSwerveModule(Constants.SwerveConstants.kFrontLeftDriveMotorCANId,
-          Constants.SwerveConstants.kFrontLeftTurnMotorCANId,
-          Configs.FrontLeftConfig.drivingConfig,
-          Configs.FrontLeftConfig.turningConfig);
-      m_frontRight = new SparkSwerveModule(Constants.SwerveConstants.kFrontRightDriveMotorCANId,
-          Constants.SwerveConstants.kFrontRightTurnMotorCANId,
-          Configs.FrontRightConfig.drivingConfig,
-          Configs.FrontRightConfig.turningConfig);
-      m_backLeft = new SparkSwerveModule(Constants.SwerveConstants.kBackLeftDriveMotorCANId,
-          Constants.SwerveConstants.kBackLeftTurnMotorCANId,
-          Configs.BackLeftConfig.drivingConfig,
-          Configs.BackLeftConfig.turningConfig);
-      m_backRight = new SparkSwerveModule(Constants.SwerveConstants.kBackRightDriveMotorCANId,
-          Constants.SwerveConstants.kBackRightTurnMotorCANId,
-          Configs.BackRightConfig.drivingConfig,
-          Configs.BackRightConfig.turningConfig);
+    m_frontLeft = new SwerveModule(Constants.SwerveConstants.kFrontLeftDriveMotorCANId,
+        Constants.SwerveConstants.kFrontLeftTurnMotorCANId,
+        Configs.FrontLeftConfig.drivingConfig,
+        Configs.FrontLeftConfig.turningConfig);
+    m_frontRight = new SwerveModule(Constants.SwerveConstants.kFrontRightDriveMotorCANId,
+        Constants.SwerveConstants.kFrontRightTurnMotorCANId,
+        Configs.FrontRightConfig.drivingConfig,
+        Configs.FrontRightConfig.turningConfig);
+    m_backLeft = new SwerveModule(Constants.SwerveConstants.kBackLeftDriveMotorCANId,
+        Constants.SwerveConstants.kBackLeftTurnMotorCANId,
+        Configs.BackLeftConfig.drivingConfig,
+        Configs.BackLeftConfig.turningConfig);
+    m_backRight = new SwerveModule(Constants.SwerveConstants.kBackRightDriveMotorCANId,
+        Constants.SwerveConstants.kBackRightTurnMotorCANId,
+        Configs.BackRightConfig.drivingConfig,
+        Configs.BackRightConfig.turningConfig);
 
-      m_swerveSimulation = null;
-
-      m_gyro = new AHRSGyroIO(Constants.GyroConstants.kComType);
-    } else {
-      m_frontLeft = new SparkSwerveModuleSim(Constants.SwerveConstants.kFrontLeftDriveMotorCANId,
-          Constants.SwerveConstants.kFrontLeftTurnMotorCANId);
-      m_frontRight = new SparkSwerveModuleSim(Constants.SwerveConstants.kFrontRightDriveMotorCANId,
-          Constants.SwerveConstants.kFrontRightTurnMotorCANId);
-      m_backLeft = new SparkSwerveModuleSim(Constants.SwerveConstants.kBackLeftDriveMotorCANId,
-          Constants.SwerveConstants.kBackLeftTurnMotorCANId);
-      m_backRight = new SparkSwerveModuleSim(Constants.SwerveConstants.kBackRightDriveMotorCANId,
-          Constants.SwerveConstants.kBackRightTurnMotorCANId);
-
-      m_gyro = new SimGyroIO();
-      m_swerveSimulation = new SwerveSimulation(m_gyro);
-    }
+    m_gyro = new AHRS(Constants.GyroConstants.kComType);
 
     m_gyro.reset();
 
     publisher = NetworkTableInstance.getDefault()
         .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
 
-    m_odometry = new SwerveDriveOdometry(
-        Constants.SwerveConstants.kKinematics,
-        m_gyro.getRotation2d(),
-        getModulePositions());
+    m_poseEstimator = new SwerveDrivePoseEstimator(Constants.SwerveConstants.kKinematics, getRotation(),
+        getModulePositions(), new Pose2d(), Constants.SwerveConstants.kStateStdDevs,
+        Constants.SwerveConstants.kVisionStdDevs);
 
-    m_poseEstimator = new SwerveDrivePoseEstimator(
-        Constants.SwerveConstants.kKinematics,
-        m_gyro.getRotation2d(),
-        getModulePositions(),
-        new Pose2d(),
-        VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-        VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
+    m_xPID.setTolerance(0, .01);
+    m_yPID.setTolerance(0, .01);
+    m_rotPID.setTolerance(0, .05);
 
-    try {
-      config = RobotConfig.fromGUISettings();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    AutoBuilder.configure(
-        () -> getPose(),
-        (pose) -> resetOdometry(pose),
-        () -> getSpeeds(false),
-        (speeds, feedforwards) -> drive(
-            speeds,
-            () -> false),
-        new PPHolonomicDriveController(
-            new PIDConstants(0.6, 0.2, 0),
-            new PIDConstants(1.0, 0, 0)),
-        config,
-        () -> {
-          var alliance = DriverStation.getAlliance();
-          if (alliance.isPresent()) {
-            return alliance.get() == DriverStation.Alliance.Red;
-          }
-          return false;
-        },
-        this);
-
-    m_poseEstimatorField = new Field2d();
-    SmartDashboard.putData("Pose estimation field", m_poseEstimatorField);
+    m_rotPID.enableContinuousInput(-Math.PI, Math.PI);
   }
 
   /**
+   * Drives the swerves!
+   * 
    * @param xSpeed
    * @param ySpeed
    * @param rot
    * @param fieldOriented
    */
-  public void drive(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rot,
-      BooleanSupplier fieldOriented) {
+  public void drive(double xSpeed, double ySpeed, double rot,
+      boolean fieldOriented) {
     var swerveModuleStates = Constants.SwerveConstants.kKinematics.toSwerveModuleStates(
         ChassisSpeeds.discretize(
-            fieldOriented.getAsBoolean()
+            fieldOriented
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                    xSpeed.getAsDouble()
+                    xSpeed
                         * Constants.PhysicalConstants.kMaxSpeed,
-                    ySpeed.getAsDouble()
+                    ySpeed
                         * Constants.PhysicalConstants.kMaxSpeed,
-                    rot.getAsDouble()
+                    rot
                         * Constants.PhysicalConstants.kMaxAngularSpeed,
                     m_gyro.getRotation2d())
                 : new ChassisSpeeds(
-                    xSpeed.getAsDouble()
+                    xSpeed
                         * Constants.PhysicalConstants.kMaxSpeed,
-                    ySpeed.getAsDouble()
+                    ySpeed
                         * Constants.PhysicalConstants.kMaxSpeed,
-                    rot.getAsDouble()
+                    rot
                         * Constants.PhysicalConstants.kMaxAngularSpeed),
             Constants.SwerveConstants.kDtSeconds));
 
@@ -172,24 +120,19 @@ public class SwerveSubsystem extends SubsystemBase {
     m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
 
-    SmartDashboard.putString("Input/FL", swerveModuleStates[0].toString());
-    SmartDashboard.putString("Input/FR", swerveModuleStates[1].toString());
-    SmartDashboard.putString("Input/BL", swerveModuleStates[2].toString());
-    SmartDashboard.putString("Input/BR", swerveModuleStates[3].toString());
-
-    SmartDashboard.putNumber("Rot", rot.getAsDouble());
-
     publisher.set(swerveModuleStates);
-
-    if (RobotBase.isSimulation()) {
-      m_swerveSimulation.update(xSpeed, ySpeed, rot, fieldOriented, m_gyro.getRotation2d());
-    }
   }
 
-  public void drive(ChassisSpeeds speeds, BooleanSupplier fieldOriented) {
+  /**
+   * Drives the swerves!
+   * 
+   * @param speeds
+   * @param fieldOriented
+   */
+  public void drive(ChassisSpeeds speeds, boolean fieldOriented) {
     var swerveModuleStates = Constants.SwerveConstants.kKinematics.toSwerveModuleStates(
         ChassisSpeeds.discretize(
-            fieldOriented.getAsBoolean()
+            fieldOriented
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
                     m_gyro.getRotation2d())
                 : speeds,
@@ -201,67 +144,103 @@ public class SwerveSubsystem extends SubsystemBase {
     m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
 
-    if (RobotBase.isSimulation()) {
-      m_swerveSimulation.update(() -> speeds.vxMetersPerSecond,
-          () -> speeds.vyMetersPerSecond, () -> speeds.omegaRadiansPerSecond,
-          fieldOriented,
-          m_gyro.getRotation2d());
+    publisher.set(swerveModuleStates);
+  }
+
+  public void resetPIDs(Pose2d setPose) {
+    m_xPID.reset(setPose.getX());
+    m_yPID.reset(setPose.getY());
+    m_rotPID.reset(setPose.getRotation().getRadians());
+  }
+
+  public void driveRelativeTo(Pose2d currentPose, Pose2d newPose) {
+    if (Math.abs(currentPose.getX() - newPose.getX()) < Constants.SwerveConstants.kXDeadband) {
+      currentPose = new Pose2d(newPose.getX(), currentPose.getY(), currentPose.getRotation());
     }
+    if (Math.abs(currentPose.getY() - newPose.getY()) < Constants.SwerveConstants.kYDeadband) {
+      currentPose = new Pose2d(currentPose.getX(), newPose.getY(), currentPose.getRotation());
+    }
+    if (Math.abs(currentPose.getRotation().getRadians()
+        - newPose.getRotation().getRadians()) < Constants.SwerveConstants.kRotDeadband) {
+      currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), currentPose.getRotation());
+    }
+    double xOutput = -m_xPID.calculate(currentPose.getX(), newPose.getX());
+    double yOutput = -m_yPID.calculate(currentPose.getY(), newPose.getY());
+    double rotOutput = m_rotPID.calculate(currentPose.getRotation().getRadians(), newPose.getRotation().getRadians());
+
+    SmartDashboard.putString("relative/CurrentPose Input", currentPose.toString());
+    SmartDashboard.putString("relative/NewPose Target", newPose.toString());
+
+    SmartDashboard.putNumber("relative/Rotation Output", rotOutput);
+    drive(xOutput, yOutput, rotOutput, false);
   }
 
+  public void driveTo(Pose2d pose) {
+    double xOutput = -m_xPID.calculate(getPose().getX(), pose.getX());
+    double yOutput = -m_yPID.calculate(getPose().getY(), pose.getY());
+    double rotOutput = m_rotPID.calculate(getPose().getRotation().getRadians(),
+        pose.getRotation().getRadians());
+
+    // drive(xOutput, yOutput, rotOutput, false);
+  }
+
+  public void followTrajectory(SwerveSample sample) {
+    Pose2d pose = getPose();
+
+    //ChassisSpeeds speeds = new ChassisSpeeds(
+    //  samp
+    //)
+  }
+
+  /**
+   * Gets the rotation from the gyro
+   * 
+   * @return gyro rotation
+   */
+  public Rotation2d getRotation() {
+    return m_gyro.getRotation2d();
+  }
+
+  /**
+   * Gets the current pose calculated by the pose estimator in meters
+   * 
+   * @return the current pose
+   */
   public Pose2d getPose() {
-    // return m_poseEstimator.getEstimatedPosition();
-    return m_odometry.getPoseMeters();
+    return m_poseEstimator.getEstimatedPosition();
   }
 
+  /**
+   * Resets the odometry on the swerves back to the provided pose
+   * 
+   * @param pose The pose to reset to
+   */
   public void resetOdometry(Pose2d pose) {
-    m_odometry.resetPose(pose);
-    // m_poseEstimator.resetPose(pose);
+    m_poseEstimator.resetPose(pose);
   }
 
+  /**
+   * Resets the gyro to 0
+   */
   public void resetGyro() {
     m_gyro.reset();
   }
 
-  public void updateOdometry() {
-    m_odometry.update(
-        m_gyro.getRotation2d(),
-        getModulePositions());
-
-    /*
-     * m_poseEstimator.update(
-     * m_gyro.getRotation2d(),
-     * getModulePositions());
-     * 
-     * boolean doRejectUpdate = false;
-     * 
-     * LimelightHelpers.SetRobotOrientation("limelight_phred",
-     * m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0,
-     * 0, 0);
-     */
-    // LimelightHelpers.PoseEstimate mt2 =
-    // LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight_phred");
-
-    /*
-     * if (Math.abs(m_gyro.getRate()) > 720) { // if our angular velocity is greater
-     * than 720 degrees per
-     * // second,
-     * // ignore vision updates
-     * doRejectUpdate = true;
-     * }
-     * if (mt2.tagCount == 0) {
-     * doRejectUpdate = true;
-     * }
-     * if (!doRejectUpdate) {
-     * m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7,
-     * 9999999));
-     * m_poseEstimator.addVisionMeasurement(
-     * mt2.pose,
-     * mt2.timestampSeconds);
-     * }
-     */
+  /**
+   * Adds a vision measurement to the pose estimator
+   * 
+   * @param measurement the vision measurement to add
+   * @param timestamp   the time that the measurement was taken
+   */
+  public void addVisionMeasurement(Pose2d measurement, double timestamp) {
+    m_poseEstimator.addVisionMeasurement(measurement, timestamp);
   }
 
+  /**
+   * Gets the current positions of the swerve modules
+   * 
+   * @return the positions of the modules
+   */
   public SwerveModulePosition[] getModulePositions() {
     return new SwerveModulePosition[] {
         m_frontLeft.getPosition(),
@@ -271,6 +250,11 @@ public class SwerveSubsystem extends SubsystemBase {
     };
   }
 
+  /**
+   * Gets the current states of the modules
+   * 
+   * @return the state of all the modules
+   */
   public SwerveModuleState[] getModuleStates() {
     return new SwerveModuleState[] {
         m_frontLeft.getState(),
@@ -279,6 +263,13 @@ public class SwerveSubsystem extends SubsystemBase {
         m_backRight.getState() };
   }
 
+  /**
+   * Gets the current chassis speeds of the robot
+   * 
+   * @param fieldRelative whether the speeds are relative to the field or to the
+   *                      robot
+   * @return the current chassis speeds
+   */
   public ChassisSpeeds getSpeeds(boolean fieldRelative) {
     ChassisSpeeds robotRelativeSpeeds = Constants.SwerveConstants.kKinematics.toChassisSpeeds(getModuleStates());
 
@@ -290,28 +281,8 @@ public class SwerveSubsystem extends SubsystemBase {
         robotRelativeSpeeds, getPose().getRotation());
   }
 
-  public static SwerveSubsystem getInstance() {
-    if (instance == null) {
-      instance = new SwerveSubsystem();
-    }
-    return instance;
-  }
-
   public void periodic() {
-    updateOdometry();
-
-    m_poseEstimatorField.setRobotPose(getPose());
-
-    SmartDashboard.putNumber("F.L. Drive motor temp", m_frontLeft.getDriveTemp());
-
-    SmartDashboard.putNumber("Swerve/FrontLeft/Speed", m_frontLeft.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Swerve/FrontLeft/Angle", m_frontLeft.getPosition().angle.getDegrees());
-    SmartDashboard.putNumber("Swerve/FrontRight/Speed", m_frontRight.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Swerve/FrontRight/Angle", m_frontRight.getPosition().angle.getDegrees());
-    SmartDashboard.putNumber("Swerve/BackLeft/Speed", m_backLeft.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Swerve/BackLeft/Angle", m_backLeft.getPosition().angle.getDegrees());
-    SmartDashboard.putNumber("Swerve/BackRight/Speed", m_backRight.getState().speedMetersPerSecond);
-    SmartDashboard.putNumber("Swerve/BackRight/Angle", m_backRight.getPosition().angle.getDegrees());
+    m_poseEstimator.update(getRotation(), getModulePositions());
 
     SmartDashboard.putString("Speeds", getSpeeds(true).toString());
     SmartDashboard.putString("States/FL", getModuleStates()[0].toString());
@@ -319,10 +290,8 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putString("States/BL", getModuleStates()[2].toString());
     SmartDashboard.putString("States/BR", getModuleStates()[3].toString());
 
-    SmartDashboard.updateValues();
-  }
+    SmartDashboard.putString("CurrentPose", getPose().toString());
 
-  @Override
-  public void simulationPeriodic() {
+    SmartDashboard.updateValues();
   }
 }
