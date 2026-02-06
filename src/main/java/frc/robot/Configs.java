@@ -2,6 +2,9 @@ package frc.robot;
 
 import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
+import frc.robot.Constants.SwerveConstants;
+
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 /**
@@ -17,8 +20,6 @@ public final class Configs {
           / Constants.SwerveConstants.kDrivingMotorReduction;
       double turningFactor = 2 * Math.PI;
 
-      double drivingVelocityFeedForward = 1 / 6;
-
       drivingConfig
           .idleMode(IdleMode.kBrake)
           .smartCurrentLimit(50)
@@ -28,9 +29,9 @@ public final class Configs {
           .velocityConversionFactor(drivingFactor / 60);
       drivingConfig.closedLoop
           .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-          .pid(0.4, 0, 0)
+          .pid(SwerveConstants.kDriveP, SwerveConstants.kDriveI, SwerveConstants.kDriveD)
           .outputRange(-1, 1);
-      drivingConfig.closedLoop.feedForward.kV(drivingVelocityFeedForward);
+      drivingConfig.closedLoop.feedForward.kV(0.0001);
 
       turningConfig
           .idleMode(IdleMode.kBrake)
@@ -42,7 +43,7 @@ public final class Configs {
           .velocityConversionFactor(turningFactor / 60);
       turningConfig.closedLoop
           .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-          .pid(1, 0, 0)
+          .pid(SwerveConstants.kTurnP, SwerveConstants.kTurnI, SwerveConstants.kTurnD)
           .outputRange(-1, 1)
           .positionWrappingEnabled(true)
           .positionWrappingInputRange(0, turningFactor);
@@ -69,7 +70,7 @@ public final class Configs {
           .velocityConversionFactor(drivingFactor / 60);
       drivingConfig.closedLoop
           .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-          .pid(0.4, 0, 0)
+          .pid(SwerveConstants.kDriveP, SwerveConstants.kDriveI, SwerveConstants.kDriveD)
           .outputRange(-1, 1);
       drivingConfig.closedLoop.feedForward.kV(drivingVelocityFeedForward);
 
@@ -83,7 +84,7 @@ public final class Configs {
           .velocityConversionFactor(turningFactor / 60);
       turningConfig.closedLoop
           .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-          .pid(1, 0, 0)
+          .pid(SwerveConstants.kTurnP, SwerveConstants.kTurnI, SwerveConstants.kTurnD)
           .outputRange(-1, 1)
           .positionWrappingEnabled(true)
           .positionWrappingInputRange(0, turningFactor);
@@ -110,7 +111,7 @@ public final class Configs {
           .velocityConversionFactor(drivingFactor / 60);
       drivingConfig.closedLoop
           .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-          .pid(0.4, 0, 0)
+          .pid(SwerveConstants.kDriveP, SwerveConstants.kDriveI, SwerveConstants.kDriveD)
           .outputRange(-1, 1);
       drivingConfig.closedLoop.feedForward.kV(drivingVelocityFeedForward);
 
@@ -124,7 +125,7 @@ public final class Configs {
           .velocityConversionFactor(turningFactor / 60);
       turningConfig.closedLoop
           .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-          .pid(1, 0, 0)
+          .pid(SwerveConstants.kTurnP, SwerveConstants.kTurnI, SwerveConstants.kTurnD)
           .outputRange(-1, 1)
           .positionWrappingEnabled(true)
           .positionWrappingInputRange(0, turningFactor);
@@ -151,7 +152,7 @@ public final class Configs {
           .velocityConversionFactor(drivingFactor / 60);
       drivingConfig.closedLoop
           .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-          .pid(0.4, 0, 0)
+          .pid(SwerveConstants.kDriveP, SwerveConstants.kDriveI, SwerveConstants.kDriveD)
           .outputRange(-1, 1);
       drivingConfig.closedLoop.feedForward.kV(drivingVelocityFeedForward);
 
