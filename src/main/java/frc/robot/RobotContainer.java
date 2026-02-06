@@ -11,48 +11,54 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.controls.LogitechPro;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 
 public class RobotContainer {
-  private final SwerveSubsystem swerveSubsystem;
-  private final VisionSubsystem visionSubsystem;
+  private final SwerveSubsystem m_swerveSubsystem;
+  private final VisionSubsystem m_visionSubsystem;
+  private final ShooterSubsystem m_shooterSubsystem;
 
   private final AutoFactory autoFactory;
 
   LogitechPro joystick;
-  // CommandJoystick buttonBox;
 
   public RobotContainer() {
-    swerveSubsystem = new SwerveSubsystem();
-    visionSubsystem = new VisionSubsystem();
+    m_swerveSubsystem = new SwerveSubsystem();
+    m_visionSubsystem = new VisionSubsystem();
+    m_shooterSubsystem = new ShooterSubsystem();
 
     autoFactory = new AutoFactory(
-      swerveSubsystem::getPose,
-      swerveSubsystem::resetOdometry,
-      swerveSubsystem::followTrajectory, true, swerveSubsystem);
+      m_swerveSubsystem::getPose,
+      m_swerveSubsystem::resetOdometry,
+      m_swerveSubsystem::followTrajectory, true, m_swerveSubsystem);
 
     joystick = new LogitechPro(0);
-    // CommandJoystick buttonBox = new CommandJoystick(1);
 
+  
     configureBindings(); 
   }
 
   private void configureBindings() {
-    swerveSubsystem.setDefaultCommand(new DriveCommand(swerveSubsystem,
+    m_swerveSubsystem.setDefaultCommand(new DriveCommand(m_swerveSubsystem,
       joystick::getY,
       joystick::getX, 
       joystick::getZ,
       joystick::getThrottle,
-      joystick::getFieldOriented));
+      joystick.button(1)));
 
    new Trigger(() -> true) // always active, sends vision estimates to swerve
         .onTrue(new InstantCommand(() -> {
-          visionSubsystem.getEstimatedRelativePose().ifPresent(pose -> {
-            swerveSubsystem.addVisionMeasurement(pose, Timer.getFPGATimestamp());
+          m_visionSubsystem.getEstimatedRelativePose().ifPresent(pose -> {
+            m_swerveSubsystem.addVisionMeasurement(pose, Timer.getFPGATimestamp());
           });
         })); 
+
+    Trigger shooterButton = new Trigger(joystick.button(1));
+    shooterButton.onTrue(new ShooterCommand(m_shooterSubsystem));
   }
 
   public Command getAutonomousCommand() {
