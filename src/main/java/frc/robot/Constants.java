@@ -84,10 +84,13 @@ public class Constants {
 
     public static final double kArmUpEncoderValue = 99; /* TODO */
     public static final double kArmDownEncoderValue = 99; /* TODO */
+    public static final double kArmDrivingEncoderValue = 99; /* TODO */
 
-    public static final double kArmP = 0; // PID Tuning Values
-    public static final double kArmD = 0;
-    public static final double kArmI = 0;
+    public static final double kArmP = 0.0; // PID Tuning Values /* TODO */
+    public static final double kArmI = 0.0; 
+    public static final double kArmD = 0.0; /* TODO */
+
+    public static final double kArmCos = 0.1; // Feedforward value to counteract gravity. /* TODO */
   }
 
   /* -------------------- Physical Constants --------------------- */
