@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -20,6 +21,7 @@ public class RobotContainer {
   private final ShooterSubsystem m_shooterSubsystem;
 
   LogitechPro joystick;
+  XboxController gamepad;
 
   public RobotContainer() {
     m_swerveSubsystem = new SwerveSubsystem();
@@ -27,7 +29,7 @@ public class RobotContainer {
     m_shooterSubsystem = new ShooterSubsystem();
 
     joystick = new LogitechPro(0);
-
+    gamepad = new XboxController(1);
   
     configureBindings(); 
   }
@@ -39,7 +41,7 @@ public class RobotContainer {
 
     // -- Button Assignments --
 
-    shooterButton.whileTrue(new AutoShootCommand(m_shooterSubsystem, m_swerveSubsystem, joystick::getX, joystick::getY));
+    shooterButton.whileTrue(new AutoShootCommand(m_shooterSubsystem, m_swerveSubsystem, m_visionSubsystem, joystick::getX, joystick::getY));
 
     // -- Default commands --
 

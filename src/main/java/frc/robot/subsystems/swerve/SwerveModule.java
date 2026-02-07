@@ -38,6 +38,7 @@ public class SwerveModule {
    * @param driveMotorChannel PWM output for the drive motor.
    * @param turnMotorChannel  PWM output for the turning motor.
    */
+  @SuppressWarnings("removal")
   public SwerveModule(
       int driveMotorChannel,
       int turnMotorChannel,
@@ -51,8 +52,6 @@ public class SwerveModule {
 
     m_drivePIDController = m_driveMotor.getClosedLoopController();
     m_turnPIDController = m_turnMotor.getClosedLoopController();
-
-    
 
     m_driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
