@@ -4,14 +4,11 @@
 
 package frc.robot;
 
-import choreo.auto.AutoFactory;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.DriveCommand;
-import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.drive.DriveCommand;
+import frc.robot.commands.shoot.AutoShootCommand;
 import frc.robot.controls.LogitechPro;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
@@ -22,19 +19,12 @@ public class RobotContainer {
   private final VisionSubsystem m_visionSubsystem;
   private final ShooterSubsystem m_shooterSubsystem;
 
-  private final AutoFactory autoFactory;
-
   LogitechPro joystick;
 
   public RobotContainer() {
     m_swerveSubsystem = new SwerveSubsystem();
     m_visionSubsystem = new VisionSubsystem();
     m_shooterSubsystem = new ShooterSubsystem();
-
-    autoFactory = new AutoFactory(
-      m_swerveSubsystem::getPose,
-      m_swerveSubsystem::resetOdometry,
-      m_swerveSubsystem::followTrajectory, true, m_swerveSubsystem);
 
     joystick = new LogitechPro(0);
 
@@ -43,15 +33,22 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    // -- Triggers --
+
+    Trigger shooterButton = new Trigger(joystick.button(1));
+
+    // -- Button Assignments --
+
+    shooterButton.whileTrue(new AutoShootCommand(m_shooterSubsystem, m_swerveSubsystem, joystick::getX, joystick::getY));
+
+    // -- Default commands --
+
     m_swerveSubsystem.setDefaultCommand(new DriveCommand(m_swerveSubsystem,
       joystick::getY,
       joystick::getX, 
       joystick::getZ,
-      joystick::getThrottle,
+      joystick::getAdjustedThrottle,
       joystick.button(1)));
-
-    Trigger shooterButton = new Trigger(joystick.button(1));
-    //shooterButton.onTrue(new ShooterCommand(m_shooterSubsystem));
   }
 
   public Command getAutonomousCommand() {

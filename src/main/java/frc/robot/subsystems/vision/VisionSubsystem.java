@@ -11,18 +11,15 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
 
 public class VisionSubsystem extends SubsystemBase {
-  private PhotonCamera camera;
+  private PhotonCamera m_camera;
 
-  private Transform3d robotToCamera;
-  private Transform3d robotToTarget;
+  private Transform3d m_robotToTarget;
 
   private PhotonPipelineResult result = new PhotonPipelineResult();
 
@@ -32,11 +29,10 @@ public class VisionSubsystem extends SubsystemBase {
    * Creates a vision subsystem
    */
   public VisionSubsystem() {
-    camera = new PhotonCamera(VisionConstants.kCameraName);
+    m_camera = new PhotonCamera(VisionConstants.kCameraName);
 
-    robotToCamera = VisionConstants.robotToCamera1;
+    m_photonPoseEstimator = new PhotonPoseEstimator(VisionConstants.kAprilTagLayout, VisionConstants.kRobotToCamera1);
 
-    m_photonPoseEstimator = new PhotonPoseEstimator(VisionConstants.kAprilTagLayout, robotToCamera);
   }
 
   public Pose2d getTargetPose(Pose2d tag) {
@@ -66,16 +62,7 @@ public class VisionSubsystem extends SubsystemBase {
     return tagTransform;
   }
 
-  public double getHubDistance() {
-    return 0;
-  }
 
-  public double getShootPower() {
-    double distance = getHubDistance();
-
-    return Constants.ShooterConstants.kAutoShooterDistanceMultiplier
-        * Math.pow(distance, Constants.ShooterConstants.kAutoShooterDistanceExponent);
-  }
 
   /**
    * Gets the estimated pose of the robot relative to the field
@@ -98,23 +85,23 @@ public class VisionSubsystem extends SubsystemBase {
     Pose3d cameraPose = new Pose3d(tagToCamera.getX(), tagToCamera.getY(), tagToCamera.getZ(),
         tagToCamera.getRotation());
 
-    Pose3d robotPose = cameraPose.transformBy(robotToCamera.inverse());
+    Pose3d robotPose = cameraPose.transformBy(VisionConstants.kRobotToCamera1.inverse());
     SmartDashboard.putString("currentRelativePose", robotPose.toString());
     return Optional.ofNullable(robotPose.toPose2d());
   }
 
   @Override
   public void periodic() {
-    var results = camera.getAllUnreadResults();
+    var results = m_camera.getAllUnreadResults();
     if (!results.isEmpty()) {
       result = results.get(results.size() - 1);
 
       if (result.hasTargets()) {
-        robotToTarget = robotToCamera.plus(result.getBestTarget().getBestCameraToTarget());
-        SmartDashboard.putNumber("robotToTarget/X", robotToTarget.getX());
-        SmartDashboard.putNumber("robotToTarget/Y", robotToTarget.getY());
-        SmartDashboard.putNumber("robotToTarget/Z", robotToTarget.getZ());
-        SmartDashboard.putNumber("robotToTarget/Rot", robotToTarget.getRotation().toRotation2d().getRadians());
+        m_robotToTarget = VisionConstants.kRobotToCamera1.plus(result.getBestTarget().getBestCameraToTarget());
+        SmartDashboard.putNumber("robotToTarget/X", m_robotToTarget.getX());
+        SmartDashboard.putNumber("robotToTarget/Y", m_robotToTarget.getY());
+        SmartDashboard.putNumber("robotToTarget/Z", m_robotToTarget.getZ());
+        SmartDashboard.putNumber("robotToTarget/Rot", m_robotToTarget.getRotation().toRotation2d().getRadians());
 
         SmartDashboard.putString("Estimated pose", getEstimatedGlobalPose().get().estimatedPose.toString());
       }

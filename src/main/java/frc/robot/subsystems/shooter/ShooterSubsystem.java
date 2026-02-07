@@ -41,13 +41,13 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterRightPID = m_shooterRightSparkMax.getClosedLoopController();
   }
 
-  public void feederMotorsStart() {
+  public void feed() {
     //m_feederLeftSparkMax.set(ShooterConstants.kFeederSpeed);
     //m_feederRightSparkMax.set(ShooterConstants.kFeederSpeed);
   }
 
-  public void shooterMotorsSet(double shootSpeed) {
-    this.shootSpeed = shootSpeed;
+  public void shoot(double shootSpeedRPM) {
+    this.shootSpeed = shootSpeedRPM;
 
     m_shooterLeftPID.setSetpoint(-this.shootSpeed, ControlType.kVelocity);
     m_shooterRightPID.setSetpoint(this.shootSpeed, ControlType.kVelocity);

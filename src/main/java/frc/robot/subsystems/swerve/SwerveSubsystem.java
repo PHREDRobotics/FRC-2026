@@ -2,15 +2,16 @@ package frc.robot.subsystems.swerve;
 
 import com.studica.frc.AHRS;
 
-import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -42,6 +43,8 @@ public class SwerveSubsystem extends SubsystemBase {
   private final ProfiledPIDController m_rotPID = new ProfiledPIDController(Constants.VisionConstants.kRotP,
       Constants.VisionConstants.kRotI, Constants.VisionConstants.kRotD,
       Constants.VisionConstants.kRotControllerConstraints);
+
+  private Translation2d m_hubTranslation;
 
   /**
    * Creates a new swerve subsystem
@@ -82,6 +85,7 @@ public class SwerveSubsystem extends SubsystemBase {
     m_rotPID.setTolerance(0, .05);
 
     m_rotPID.enableContinuousInput(-Math.PI, Math.PI);
+
   }
 
   /**
@@ -154,24 +158,10 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void driveRelativeTo(Pose2d currentPose, Pose2d newPose) {
-    if (Math.abs(currentPose.getX() - newPose.getX()) < Constants.SwerveConstants.kXDeadband) {
-      currentPose = new Pose2d(newPose.getX(), currentPose.getY(), currentPose.getRotation());
-    }
-    if (Math.abs(currentPose.getY() - newPose.getY()) < Constants.SwerveConstants.kYDeadband) {
-      currentPose = new Pose2d(currentPose.getX(), newPose.getY(), currentPose.getRotation());
-    }
-    if (Math.abs(currentPose.getRotation().getRadians()
-        - newPose.getRotation().getRadians()) < Constants.SwerveConstants.kRotDeadband) {
-      currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), currentPose.getRotation());
-    }
     double xOutput = -m_xPID.calculate(currentPose.getX(), newPose.getX());
     double yOutput = -m_yPID.calculate(currentPose.getY(), newPose.getY());
     double rotOutput = m_rotPID.calculate(currentPose.getRotation().getRadians(), newPose.getRotation().getRadians());
 
-    SmartDashboard.putString("relative/CurrentPose Input", currentPose.toString());
-    SmartDashboard.putString("relative/NewPose Target", newPose.toString());
-
-    SmartDashboard.putNumber("relative/Rotation Output", rotOutput);
     drive(xOutput, yOutput, rotOutput, false);
   }
 
@@ -181,15 +171,44 @@ public class SwerveSubsystem extends SubsystemBase {
     double rotOutput = m_rotPID.calculate(getPose().getRotation().getRadians(),
         pose.getRotation().getRadians());
 
-    // drive(xOutput, yOutput, rotOutput, false);
+    drive(xOutput, yOutput, rotOutput, true);
   }
 
-  public void followTrajectory(SwerveSample sample) {
-    Pose2d pose = getPose();
+  public void alignToAndDrive(double x, double y, Rotation2d rot, boolean fieldOriented) {
+    double rotOutput = m_rotPID.calculate(getPose().getRotation().getRadians());
 
-    //ChassisSpeeds speeds = new ChassisSpeeds(
-    //  samp
-    //)
+    drive(x, y, rotOutput, fieldOriented);
+  }
+
+  public double getHubDistance() {
+    double distance = -1;
+    distance = Math.sqrt(
+        Math.pow(m_hubTranslation.getX() - getPose().getX(),
+            2)
+            + Math.pow(
+                m_hubTranslation.getY() - getPose().getY(),
+                2));
+
+    return distance;
+  }
+
+  public double getPointAngleDegrees(Translation2d point) {
+    return Math.atan2(point.getY() - getPose().getY(), point.getX() - getPose().getX());
+  }
+
+  public double getPointAngleRadians(Translation2d point) {
+    return Units.degreesToRadians(getPointAngleDegrees(point));
+  }
+
+  public double getShootPower() {
+    double distance = getHubDistance();
+
+    return Constants.ShooterConstants.kAutoShooterDistanceMultiplier
+        * Math.pow(distance, Constants.ShooterConstants.kAutoShooterDistanceExponent);
+  }
+
+  public boolean isAligned() {
+    return Math.abs(getPointAngleDegrees(Constants.VisionConstants.kHubPos) - getPose().getRotation().getDegrees()) < Constants.SwerveConstants.kAlignedWithHubRangeDegrees;
   }
 
   /**

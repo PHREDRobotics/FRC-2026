@@ -1,6 +1,6 @@
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Volts;
+import java.util.Optional;
 
 import com.studica.frc.AHRS.NavXComType;
 
@@ -18,6 +18,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /**
  * Constants for the robot
@@ -50,8 +52,8 @@ public class Constants {
 
     public static final double kThrottleMultiplier = 1;
 
-    public static final double kMaxThrottle = 5;
-    public static final double kMinThrottle = 2.5;
+    public static final double kMaxThrottle = 1;
+    public static final double kMinThrottle = 0.1;
   }
 
   /* -------------------- Gyro Constants ------------------------- */
@@ -115,11 +117,10 @@ public class Constants {
     public static final int kFeederLeftMotorCANId = 36;
     public static final int kFeederRightMotorCANId = 37;
 
-    
     public static final int kShooterLeftMotorCANId = 41;
     public static final int kShooterRightMotorCANId = 42;
-    //public static final int kShooterBackLeftMotorCANId = 46;
-    //public static final int kShooterBackRightMotorCANId = 47;
+    // public static final int kShooterBackLeftMotorCANId = 46;
+    // public static final int kShooterBackRightMotorCANId = 47;
 
     public static final double kInitialShootingSpeed = 1000;
 
@@ -194,6 +195,8 @@ public class Constants {
     public static final double kXDeadband = 0.03;
     public static final double kYDeadband = 0.03;
     public static final double kRotDeadband = 0.05;
+
+    public static final double kAlignedWithHubRangeDegrees = 3;
   }
 
   /* -------------------- Vision Constants ----------------------- */
@@ -205,7 +208,22 @@ public class Constants {
 
     // Camera facing forward. And offset to the robot center by half a meter up and
     // half a meter forward.
-    public static final Transform3d robotToCamera1 = new Transform3d(0.5, 0, 0.5, new Rotation3d()); // CHANGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    public static final Transform3d kRobotToCamera1 = new Transform3d(0.5, 0, 0.5, new Rotation3d()); // CHANGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+
+    public static final Translation2d kRedHubPos = new Translation2d(11.6741194, 4.0346376);
+    public static final Translation2d kBlueHubPos = new Translation2d(4.6187614, 4.0346376);
+    public static Translation2d kHubPos;
+
+    static {
+      Optional<Alliance> alliance = DriverStation.getAlliance();
+      if (alliance.isPresent()) {
+        if (alliance.get() == Alliance.Red) {
+          kHubPos = Constants.VisionConstants.kRedHubPos;
+        } else if (alliance.get() == Alliance.Blue) {
+          kHubPos = Constants.VisionConstants.kBlueHubPos;
+        }
+      }
+    }
 
     public static final Pose2d kOffset = new Pose2d(1, 0, new Rotation2d(Math.PI));
 

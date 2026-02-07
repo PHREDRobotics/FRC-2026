@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.shoot;
 
 import java.util.function.DoubleSupplier;
 
@@ -18,12 +18,12 @@ public class ShooterCommand extends Command {
 
   @Override
   public void initialize() {
-    m_shooterSubsystem.shooterMotorsSet(Constants.ShooterConstants.kInitialShootingSpeed);
+    m_shooterSubsystem.shoot(Constants.ShooterConstants.kInitialShootingSpeed);
   }
 
   @Override
   public void execute() {
-    m_shooterSubsystem.shooterMotorsSet(speed.getAsDouble());
+    m_shooterSubsystem.shoot(speed.getAsDouble());
     SmartDashboard.putNumber("Target Speed", Constants.ShooterConstants.kInitialShootingSpeed);
   }
 
