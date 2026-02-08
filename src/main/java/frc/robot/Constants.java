@@ -64,16 +64,30 @@ public class Constants {
   /* -------------------- Fuel Constants ----------------------- */
   // Intake, Hopper, and Vector
   public static final class FuelConstants {
-
     public static final int kHopperMotorCANId = 32;
     public static final int kIntakeMotorCANId = 31;
+    public static final int kFeederLeftMotorCANId = 36;
+    public static final int kFeederRightMotorCANId = 37;
     public static final int kVectorMotorCANId = 33;
+
+    public static final double kFeederSpeed = 0.5;
 
     public static final double kIntakeSpeedSetting = 99; /* TODO */
 
     public static final double kHopperSpeedSetting = 0.5;
     public static final double kVectorSpeedSetting = 0.5;
 
+    public static final double kIntakeP = 1.0; /* TODO nate */
+    public static final double kIntakeI = 0.0;
+    public static final double kIntakeD = 0.0;
+
+    public static final double kHopperP = 1.0;
+    public static final double kHopperI = 0.0;
+    public static final double kHopperD = 0.0;
+    
+    public static final double kVectorP = 1.0;
+    public static final double kVectorI = 0.0;
+    public static final double kVectorD = 0.0;
   }
 
   /* -------------------- Intake Arm Constants ------------------- */
@@ -115,10 +129,6 @@ public class Constants {
   public static final class ShooterConstants {
     public static final double kAutoShooterFactor = 0.1 * (Math.floor(Math.PI) / Math.round(Math.E));
 
-    public static final double kFeederSpeed = 0.5;
-
-    public static final int kFeederLeftMotorCANId = 36;
-    public static final int kFeederRightMotorCANId = 37;
 
     public static final int kShooterLeftMotorCANId = 41;
     public static final int kShooterRightMotorCANId = 42;

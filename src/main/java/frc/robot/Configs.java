@@ -116,4 +116,43 @@ public final class Configs {
           .kCos(Constants.IntakeArmConstants.kArmCos);
     }
   }
+
+  public static final class FuelIntakeConfig {
+    public static final SparkMaxConfig fuelIntakeConfig = new SparkMaxConfig();
+    static {
+      fuelIntakeConfig
+        .idleMode(IdleMode.kCoast)
+        .smartCurrentLimit(50)
+        .inverted(false);
+      fuelIntakeConfig.closedLoop
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        .pid(Constants.FuelConstants.kIntakeP, Constants.FuelConstants.kIntakeI, Constants.FuelConstants.kIntakeD);
+    }
+  }
+
+  public static final class HopperConfig{
+    public static final SparkMaxConfig hopperConfig = new SparkMaxConfig();
+    static {
+      hopperConfig
+        .idleMode(IdleMode.kCoast)
+        .smartCurrentLimit(50)
+        .inverted(false);
+      hopperConfig.closedLoop
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        .pid(Constants.FuelConstants.kIntakeP, Constants.FuelConstants.kIntakeI, Constants.FuelConstants.kIntakeD);
+    }
+  }
+
+  public static final class VectorConfig {
+    public static final SparkMaxConfig vectorConfig = new SparkMaxConfig();
+    static {
+      vectorConfig 
+        .idleMode(IdleMode.kCoast)
+        .smartCurrentLimit(50)
+        .inverted(false);
+      vectorConfig.closedLoop
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        .pid(Constants.FuelConstants.kIntakeP, Constants.FuelConstants.kIntakeI, Constants.FuelConstants.kIntakeD);
+    }
+  }
 }

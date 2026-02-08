@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.shoot.AutoShootCommand;
 import frc.robot.controls.LogitechPro;
+import frc.robot.subsystems.fuel.FuelSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
@@ -19,6 +20,7 @@ public class RobotContainer {
   private final SwerveSubsystem m_swerveSubsystem;
   private final VisionSubsystem m_visionSubsystem;
   private final ShooterSubsystem m_shooterSubsystem;
+  private final FuelSubsystem m_fuelSubsystem;
 
   LogitechPro joystick;
   XboxController gamepad;
@@ -27,6 +29,7 @@ public class RobotContainer {
     m_swerveSubsystem = new SwerveSubsystem();
     m_visionSubsystem = new VisionSubsystem();
     m_shooterSubsystem = new ShooterSubsystem();
+    m_fuelSubsystem = new FuelSubsystem();
 
     joystick = new LogitechPro(0);
     gamepad = new XboxController(1);
@@ -41,7 +44,7 @@ public class RobotContainer {
 
     // -- Button Assignments --
 
-    shooterButton.whileTrue(new AutoShootCommand(m_shooterSubsystem, m_swerveSubsystem, m_visionSubsystem, joystick::getX, joystick::getY));
+    shooterButton.whileTrue(new AutoShootCommand(m_shooterSubsystem, m_fuelSubsystem, m_swerveSubsystem, m_visionSubsystem, joystick::getX, joystick::getY));
 
     // -- Default commands --
 

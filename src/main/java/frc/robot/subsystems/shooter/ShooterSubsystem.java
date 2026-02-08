@@ -14,9 +14,6 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 public class ShooterSubsystem extends SubsystemBase {
-  //private SparkMax m_feederLeftSparkMax = new SparkMax(ShooterConstants.kFeederLeftMotorCANId, MotorType.kBrushless);
-  //private SparkMax m_feederRightSparkMax = new SparkMax(ShooterConstants.kFeederRightMotorCANId, MotorType.kBrushless);
-
   private SparkMax m_shooterLeftSparkMax = new SparkMax(ShooterConstants.kShooterLeftMotorCANId, MotorType.kBrushless);
   private SparkMax m_shooterRightSparkMax = new SparkMax(ShooterConstants.kShooterRightMotorCANId, MotorType.kBrushless);
 
@@ -25,25 +22,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private double shootSpeed;
 
-  // public SparkMax frontLeftMotorSparkMax = new
-  // SparkMax(ShooterConstants.kShooterFrontLeftMotorCANId, MotorType.kBrushless);
-  // public SparkMax shooterFrontRightMotorSparkMax = new
-  // SparkMax(ShooterConstants.kShooterFrontRightMotorCANId,MotorType.kBrushless);
-
   public ShooterSubsystem() {
-    //m_feederLeftSparkMax.configure(Configs.FeederConfig.feederMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-    //m_feederRightSparkMax.configure(Configs.FeederConfig.feederMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-
     m_shooterLeftSparkMax.configure(Configs.ShooterConfig.shooterMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
     m_shooterRightSparkMax.configure(Configs.ShooterConfig.shooterMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
 
     m_shooterLeftPID = m_shooterLeftSparkMax.getClosedLoopController();
     m_shooterRightPID = m_shooterRightSparkMax.getClosedLoopController();
-  }
-
-  public void feed() {
-    //m_feederLeftSparkMax.set(ShooterConstants.kFeederSpeed);
-    //m_feederRightSparkMax.set(ShooterConstants.kFeederSpeed);
   }
 
   public void shoot(double shootSpeedRPM) {
@@ -54,8 +38,6 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void stop() {
-    //m_feederLeftSparkMax.stopMotor();
-    //m_feederRightSparkMax.stopMotor();
     m_shooterLeftSparkMax.stopMotor();
     m_shooterRightSparkMax.stopMotor();
   }
