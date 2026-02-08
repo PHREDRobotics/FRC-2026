@@ -110,7 +110,10 @@ public final class Configs {
           .p(Constants.IntakeArmConstants.kArmP)
           .i(Constants.IntakeArmConstants.kArmI)
           .d(Constants.IntakeArmConstants.kArmD)
-          .outputRange(-1, 1);
+          .outputRange(Constants.IntakeArmConstants.kArmDownEncoderValue, Constants.IntakeArmConstants.kArmUpEncoderValue);
+
+      intakeArmMotorConfig.closedLoop.feedForward
+          .kCos(Constants.IntakeArmConstants.kArmCos);
     }
   }
 }
