@@ -11,6 +11,9 @@ import com.revrobotics.spark.config.SparkMaxConfig;
  * Configs for the spark maxes
  */
 public final class Configs {
+  /**
+   * Basic config for swerve module spark maxes
+   */
   public static class SwerveConfig {
     public static final SparkMaxConfig drivingConfig = new SparkMaxConfig();
     public static final SparkMaxConfig turningConfig = new SparkMaxConfig();

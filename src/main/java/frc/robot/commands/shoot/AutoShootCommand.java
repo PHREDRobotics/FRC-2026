@@ -30,12 +30,12 @@ public class AutoShootCommand extends Command {
   }
 
   private boolean canShoot() {
-    return m_swerveSubsystem.isAligned() && m_shooterSubsystem.isAtSpeed();
+    return m_swerveSubsystem.isAlignedWithHub() && m_shooterSubsystem.isAtSpeed();
   }
 
   @Override
   public void initialize() {
-    m_shooterSubsystem.shoot(m_swerveSubsystem.getShootPower());
+    m_shooterSubsystem.shoot(m_shooterSubsystem.getShootPower(m_swerveSubsystem.getHubDistance()));
   }
 
   @Override

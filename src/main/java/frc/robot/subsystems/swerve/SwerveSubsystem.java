@@ -151,12 +151,21 @@ public class SwerveSubsystem extends SubsystemBase {
     publisher.set(swerveModuleStates);
   }
 
+  /**
+   * Resets the pids
+   * @param setPose
+   */
   public void resetPIDs(Pose2d setPose) {
     m_xPID.reset(setPose.getX());
     m_yPID.reset(setPose.getY());
     m_rotPID.reset(setPose.getRotation().getRadians());
   }
 
+  /**
+   * Drives to a pose not based off of the field
+   * @param currentPose
+   * @param newPose
+   */
   public void driveRelativeTo(Pose2d currentPose, Pose2d newPose) {
     double xOutput = -m_xPID.calculate(currentPose.getX(), newPose.getX());
     double yOutput = -m_yPID.calculate(currentPose.getY(), newPose.getY());
@@ -165,6 +174,10 @@ public class SwerveSubsystem extends SubsystemBase {
     drive(xOutput, yOutput, rotOutput, false);
   }
 
+  /**
+   * Drives to a pose relative to the field
+   * @param pose
+   */
   public void driveTo(Pose2d pose) {
     double xOutput = -m_xPID.calculate(getPose().getX(), pose.getX());
     double yOutput = -m_yPID.calculate(getPose().getY(), pose.getY());
@@ -174,12 +187,22 @@ public class SwerveSubsystem extends SubsystemBase {
     drive(xOutput, yOutput, rotOutput, true);
   }
 
+  /**
+   * Points the front of the robot to a point on the field while driving
+   * @param x
+   * @param y
+   * @param rot
+   * @param fieldOriented
+   */
   public void alignToAndDrive(double x, double y, Rotation2d rot, boolean fieldOriented) {
     double rotOutput = m_rotPID.calculate(getPose().getRotation().getRadians());
 
     drive(x, y, rotOutput, fieldOriented);
   }
 
+  /**
+   * Gets the distance from the hub
+   */
   public double getHubDistance() {
     double distance = -1;
     distance = Math.sqrt(
@@ -192,22 +215,30 @@ public class SwerveSubsystem extends SubsystemBase {
     return distance;
   }
 
+  /**
+   * Gets the angle relative to the field from the robot to a point in degrees
+   * @param point
+   * @return
+   */
   public double getPointAngleDegrees(Translation2d point) {
     return Math.atan2(point.getY() - getPose().getY(), point.getX() - getPose().getX());
   }
 
+  /**
+   * Gets the angle relative to the field from the robot to a point in radians
+   * @param point
+   * @return
+   */
   public double getPointAngleRadians(Translation2d point) {
     return Units.degreesToRadians(getPointAngleDegrees(point));
   }
 
-  public double getShootPower() {
-    double distance = getHubDistance();
 
-    return Constants.ShooterConstants.kAutoShooterDistanceMultiplier
-        * Math.pow(distance, Constants.ShooterConstants.kAutoShooterDistanceExponent);
-  }
-
-  public boolean isAligned() {
+  /**
+   * Checks if the robot is aligned with the hub
+   * @return
+   */
+  public boolean isAlignedWithHub() {
     return Math.abs(getPointAngleDegrees(Constants.VisionConstants.kHubPos) - getPose().getRotation().getDegrees()) < Constants.SwerveConstants.kAlignedWithHubRangeDegrees;
   }
 

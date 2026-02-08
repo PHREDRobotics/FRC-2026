@@ -64,6 +64,15 @@ public class ShooterSubsystem extends SubsystemBase {
     return (m_shooterLeftSparkMax.getEncoder().getVelocity() > shootSpeed - Constants.ShooterConstants.kShootThreshold) && (m_shooterLeftSparkMax.getEncoder().getVelocity() < shootSpeed + Constants.ShooterConstants.kShootThreshold); 
   }
 
+  /**
+   * Gets the power for the shooter to shoot at the hub based on a distance in meters
+   * @return
+   */
+  public double getShootPower(double distance) {
+    return Constants.ShooterConstants.kAutoShooterDistanceMultiplier
+        * Math.pow(distance, Constants.ShooterConstants.kAutoShooterDistanceExponent);
+  }
+
   @Override
   public void periodic() {
     super.periodic();
